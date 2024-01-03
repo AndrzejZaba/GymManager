@@ -9,5 +9,5 @@ public abstract class BaseController : Controller
 {
 
     private ISender _mediatr;
-    protected ISender Mediatr => _mediatr ??= HttpContext.RequestServices.GetService<ISender>();
+    protected ISender Mediator => _mediatr ??= HttpContext.RequestServices.GetService<ISender>();
 }
