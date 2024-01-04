@@ -1,9 +1,11 @@
 using GymManager.Application;
 using GymManager.Infrastructure;
 using GymManager.UI.Extensions;
+using GymManager.UI.Middlewares;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Razor;
 using NLog.Web;
+using System.Globalization;
 
 namespace GymManager.UI
 {
@@ -16,6 +18,8 @@ namespace GymManager.UI
             builder.Logging.ClearProviders();
             builder.Logging.SetMinimumLevel(LogLevel.Information);
             builder.Logging.AddNLogWeb();
+
+            builder.Services.AddCulture();
 
             builder.Services.AddApplication();
             builder.Services.AddInfrastructure();
@@ -39,6 +43,20 @@ namespace GymManager.UI
                 app.UseExceptionHandler("/Home/Error");
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
+            }
+
+            app.UseMiddleware<ExceptionHandlerMiddleware>();
+
+            var logger = app.Services.GetService<ILogger<Program>>();
+
+            if(app.Environment.IsDevelopment())
+            {
+                logger.LogInformation("DEVELOPMENT MODE!");
+            }
+            else
+            {
+                logger.LogInformation("PRODUCTION MODE!");
+
             }
 
             app.UseHttpsRedirection();
