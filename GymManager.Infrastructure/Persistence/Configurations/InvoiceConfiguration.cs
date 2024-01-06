@@ -22,7 +22,7 @@ public class InvoiceConfiguration : IEntityTypeConfiguration<Invoice>
 
         builder.HasOne(x => x.User)
             .WithMany(x => x.Invoices)
-            .HasForeignKey(x => x.User.Id)
+            .HasForeignKey(x => x.UserId)
             .OnDelete(DeleteBehavior.Restrict);
     }
 }
