@@ -22,7 +22,7 @@ namespace GymManager.UI
             builder.Services.AddCulture();
 
             builder.Services.AddApplication();
-            builder.Services.AddInfrastructure();
+            builder.Services.AddInfrastructure(builder.Configuration);
 
             builder.Services.DefineViewLocation(builder.Configuration);
 

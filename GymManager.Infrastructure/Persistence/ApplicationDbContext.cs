@@ -1,4 +1,6 @@
-﻿using GymManager.Domain.Entities;
+﻿using GymManager.Application.Common.Interfaces;
+using GymManager.Domain.Entities;
+using GymManager.Infrastructure.Persistence.Extensions;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -10,7 +12,7 @@ using File = GymManager.Domain.Entities.File;
 
 namespace GymManager.Infrastructure.Persistence;
 
-public class ApplicationDbContext : DbContext
+public class ApplicationDbContext : DbContext, IApplicationDbContext
 {
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
     {
@@ -35,6 +37,13 @@ public class ApplicationDbContext : DbContext
     {
         // tutaj zostaną zaaplikowane wszystkie konfiguracje stworzone przez nas które implementują interfejs IEntityTypeConfiguration
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+
+        modelBuilder.SeedLanguage();
+        modelBuilder.SeedAnnouncement();
+        modelBuilder.SeedSettings();
+        modelBuilder.SeedSettingsPosition();
+        modelBuilder.SeedTicketType();
+        modelBuilder.SeedTicketTypeTranslation();
 
         base.OnModelCreating(modelBuilder);
     }
