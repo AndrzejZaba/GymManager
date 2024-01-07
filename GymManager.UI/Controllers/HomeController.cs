@@ -18,7 +18,7 @@ namespace GymManager.UI.Controllers
 
         public async Task<IActionResult> Index()
         {
-            throw new Exception("Niueobsłużony błąd");
+            await Mediator.Send(new AddTicketCommand { Name = "Test" });
             return View();
         }
 
