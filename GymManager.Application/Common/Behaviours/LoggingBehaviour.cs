@@ -2,7 +2,8 @@
 using Microsoft.Extensions.Logging;
 
 namespace GymManager.Application.Common.Behaviours;
-public class LoggingBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> where TRequest : IRequest<TResponse>
+public class LoggingBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> 
+    where TRequest : IRequest<TResponse>
 {
     private readonly ILogger _logger;
 
@@ -11,7 +12,8 @@ public class LoggingBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequest,
         _logger = logger;
     }
 
-    public async Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate<TResponse> next)
+    public async Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken, 
+        RequestHandlerDelegate<TResponse> next)
     {
         var requestName = typeof(TRequest).Name;
 
