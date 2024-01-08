@@ -13,6 +13,26 @@ html {
   min-height: 100%;
 }
 
-body {
-  margin-bottom: 60px;
+.main-navbar{
+    font-size: 1.25rem;
+}
+
+.main-description {
+    font-size: 1.25rem;
+}
+
+.secondary-description {
+    font-size: 1.1rem;
+}
+
+a {
+    text-decoration: none;
+}
+
+.carousel-control-prev, .carousel-control-next {
+    filter: invert(100%);
+}
+
+ul.no-decoration{
+    list-style-type: none;
 }
