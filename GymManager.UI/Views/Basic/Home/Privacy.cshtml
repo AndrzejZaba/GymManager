@@ -1,6 +1,48 @@
-﻿@{
-    ViewData["Title"] = "Privacy Policy";
-}
-<h1>@ViewData["Title"]</h1>
+﻿@inject IConfiguration configuration
 
-<p>Use this page to detail your site's privacy policy.</p>
+@{
+    var templateKey = configuration.GetSection("TemplateKey").Value;
+    Layout = $"/Views/{templateKey}/Shared/_LayoutMain.cshtml";
+    ViewData["Title"] = "Polityka Prywatności";
+}
+
+<div class="container">
+    <div class="pt-3 pb-5">
+        <h1>@ViewBag.Title</h1>
+
+        <p class="pt-3">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus et massa vitae erat aliquam 
+            feugiat in sed lorem. In id justo mi. Integer non magna mauris. Etiam posuere vulputate magna, 
+            ut tristique dui facilisis sed. Aliquam vitae lacinia turpis. Sed tempor et metus ac pulvinar. 
+            In eget varius risus, eu cursus purus. Praesent feugiat sed ante quis sagittis. Integer tincidunt 
+            venenatis ullamcorper.
+
+            Morbi vel dui non massa scelerisque sagittis a a ante. Donec blandit quam sit amet sapien euismod, 
+            eu tincidunt velit eleifend. Praesent dictum arcu vitae euismod porttitor. Vivamus consequat bibendum 
+            tortor in dictum. Morbi nec quam purus. Curabitur rutrum consectetur ullamcorper. Donec vulputate 
+            finibus eros, at iaculis nunc fringilla at. Quisque ac metus lorem. Nulla fermentum dolor lectus, 
+            porttitor consequat diam finibus malesuada.
+
+            Aliquam erat volutpat. Vivamus in dictum metus, vel laoreet quam. Etiam sollicitudin nibh a mollis 
+            venenatis. Proin dignissim ornare orci eu pulvinar. Nulla eget porta sem. Praesent vitae leo dapibus, 
+            eleifend ligula dignissim, euismod turpis. Ut interdum tortor quis sagittis efficitur. Nam et magna 
+            fermentum mi placerat venenatis sit amet viverra leo. Nullam at laoreet nibh, non aliquam ipsum. 
+            Maecenas feugiat sapien a vestibulum suscipit.
+
+            Nullam porttitor enim vitae sem molestie dignissim. Donec tempor ex non mattis consectetur. Sed quam 
+            sem, laoreet in cursus porttitor, accumsan nec nisl. Aliquam auctor mi tellus, non cursus nisl mollis 
+            vel. Duis massa risus, scelerisque non cursus vitae, aliquet id erat. Praesent a gravida sem, non 
+            laoreet tellus. Curabitur congue velit vel iaculis volutpat.
+
+            Praesent est turpis, euismod at lorem nec, sodales pellentesque erat. Aliquam egestas mi et enim 
+            aliquet aliquet nec sit amet lorem. Donec commodo vehicula sapien, vitae hendrerit lorem bibendum 
+            id. Pellentesque ullamcorper velit eu neque gravida sodales. Phasellus non finibus nulla. Integer 
+            luctus nulla ac lectus dictum gravida. Phasellus ullamcorper, quam et elementum luctus, mauris sem 
+            euismod dui, ac dictum felis risus a arcu. Fusce vitae placerat purus. Mauris lobortis, elit ut 
+            ultricies dapibus, ante nisi sagittis magna, nec ornare odio lacus vitae urna. Fusce diam enim, semper 
+            in mi sed, rhoncus vestibulum turpis. Suspendisse varius, lorem nec sagittis vehicula, quam lorem 
+            fermentum justo, a mollis neque nunc eu ante. Aliquam congue pharetra augue quis sodales. Fusce id 
+            pharetra velit. Maecenas turpis ipsum, blandit ut dolor at, congue convallis tortor.
+        </p>
+    </div>
+</div>

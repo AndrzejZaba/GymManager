@@ -18,7 +18,6 @@ namespace GymManager.UI.Controllers
 
         public async Task<IActionResult> Index()
         {
-            await Mediator.Send(new AddTicketCommand { Name = "Test" });
             return View();
         }
 
@@ -27,10 +26,10 @@ namespace GymManager.UI.Controllers
             return View();
         }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
+        public IActionResult Contact()
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            return View();
         }
+
     }
 }
