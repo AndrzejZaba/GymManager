@@ -1,4 +1,5 @@
 using GymManager.Application;
+using GymManager.Application.Common.Interfaces;
 using GymManager.Infrastructure;
 using GymManager.UI.Extensions;
 using GymManager.UI.Middlewares;
@@ -35,7 +36,11 @@ namespace GymManager.UI
 
             var app = builder.Build();
 
-            app.UseInfrastructure();
+            using (var scope = app.Services.CreateScope())
+            {
+                app.UseInfrastructure(scope.ServiceProvider.GetRequiredService<IApplicationDbContext>(),
+                    app.Services.GetService<IAppSettingsService>());
+            }
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())

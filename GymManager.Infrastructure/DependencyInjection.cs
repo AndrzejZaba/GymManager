@@ -1,5 +1,6 @@
 ﻿using GymManager.Application.Common.Interfaces;
 using GymManager.Infrastructure.Persistence;
+using GymManager.Infrastructure.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -20,11 +21,18 @@ public static class DependencyInjection
         options.UseSqlServer(connectionString)
         .EnableSensitiveDataLogging());
 
+        services.AddSingleton<IAppSettingsService, AppSettingsService>();
+
+
         return services;
     }
      
-    public static IApplicationBuilder UseInfrastructure(this IApplicationBuilder app)
+    public static IApplicationBuilder UseInfrastructure(
+        this IApplicationBuilder app,
+        IApplicationDbContext context,
+        IAppSettingsService appSettingsService)
     {
+        appSettingsService.Update(context).GetAwaiter().GetResult();
         return app;
     }
 }
