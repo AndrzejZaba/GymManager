@@ -38,8 +38,10 @@ namespace GymManager.UI
 
             using (var scope = app.Services.CreateScope())
             {
-                app.UseInfrastructure(scope.ServiceProvider.GetRequiredService<IApplicationDbContext>(),
-                    app.Services.GetService<IAppSettingsService>());
+                app.UseInfrastructure(
+                    scope.ServiceProvider.GetRequiredService<IApplicationDbContext>(),
+                    app.Services.GetService<IAppSettingsService>(),
+                    app.Services.GetService<IEmail>());
             }
 
             // Configure the HTTP request pipeline.

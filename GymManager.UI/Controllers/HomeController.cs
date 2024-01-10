@@ -1,4 +1,5 @@
-﻿using GymManager.Application.Tickets.Commands.AddTicket;
+﻿using GymManager.Application.Contacts.Commands.SendContactEmail;
+using GymManager.Application.Tickets.Commands.AddTicket;
 using GymManager.Application.Tickets.Queries.GetTicketById;
 using GymManager.UI.Models;
 using MediatR;
@@ -28,7 +29,16 @@ namespace GymManager.UI.Controllers
 
         public IActionResult Contact()
         {
-            return View();
+            return View(new SendContactEmailCommand());
+        }
+
+        [ValidateAntiForgeryToken]
+        [HttpPost]
+        public async Task<IActionResult> Contact(SendContactEmailCommand command)
+        {
+            await Mediator.Send(command);
+
+            return RedirectToAction("Contact");
         }
 
     }
