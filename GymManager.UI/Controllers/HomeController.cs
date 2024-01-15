@@ -1,4 +1,5 @@
-﻿using GymManager.Application.Contacts.Commands.SendContactEmail;
+﻿using GymManager.Application.Common.Exceptions;
+using GymManager.Application.Contacts.Commands.SendContactEmail;
 using GymManager.Application.Tickets.Commands.AddTicket;
 using GymManager.Application.Tickets.Queries.GetTicketById;
 using GymManager.UI.Models;
@@ -36,7 +37,11 @@ namespace GymManager.UI.Controllers
         [HttpPost]
         public async Task<IActionResult> Contact(SendContactEmailCommand command)
         {
-            await Mediator.Send(command);
+            var result = await MediatorSendValidate(command);
+
+            if (!result.IsValid)
+                return View(command);
+            
 
             return RedirectToAction("Contact");
         }
