@@ -9,6 +9,10 @@
     ViewData["Title"] = "Kontakt";
 }
 
+@section Styels {
+    <link rel="stylesheet" href="~/lib/toastr.js/toastr.min.css" />
+
+}
 
 <div id="carouselExampleControls" class="carousel slide mt-3 mb-3" data-bs-ride="carousel">
   <div class="carousel-inner">
@@ -85,6 +89,13 @@
 
 
 @section Scripts{
+<script src="~/lib/toastr.js/toastr.min.js"></script>
 <partial name = "_ValidationScriptsPartial" />
 
+<script>
+    if ('@TempData["Success"]')
+    {
+        toastr.success('@TempData["Success"]')
+    }
+</script>
 }

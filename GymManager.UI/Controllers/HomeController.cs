@@ -48,6 +48,7 @@ namespace GymManager.UI.Controllers
                 return View(command);
             }
 
+            TempData["Success"] = "Wiadomość została wysłana do administratora.";
 
             return RedirectToAction("Contact");
         }
