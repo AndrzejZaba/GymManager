@@ -60,3 +60,33 @@ privacy-policy-btn {
 i.fas{
     margin-right: 0.3rem;
 }
+
+.card-border-top{
+    border-top: 3px solid #0d6efd;
+}
+
+.card-primary{
+    padding-left: 0;
+    padding-right: 0;
+    margin-bottom: 1rem;
+}
+
+@media screen and (min-width: 640px) {
+    .card-body{
+        padding: 2rem;
+    }
+}
+
+ul.client-panel{
+    width: 100%;
+}
+
+ul.client-panel li.nav-item{
+    width: 100%;
+    padding-left: 1rem;
+}
+
+ul.client-panel li.nav-item.active{
+    background-color: #007bff;
+    border-radius: 5px;
+}
