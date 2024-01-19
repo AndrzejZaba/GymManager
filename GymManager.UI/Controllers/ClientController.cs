@@ -8,5 +8,9 @@ namespace GymManager.UI.Controllers
         {
             return View();
         }
+        public IActionResult Client()
+        {
+            return View();
+        }
     }
 }
