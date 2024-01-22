@@ -45,6 +45,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
         modelBuilder.SeedSettingsPosition();
         modelBuilder.SeedTicketType();
         modelBuilder.SeedTicketTypeTranslation();
+        modelBuilder.SeedRoels();
 
         base.OnModelCreating(modelBuilder);
     }

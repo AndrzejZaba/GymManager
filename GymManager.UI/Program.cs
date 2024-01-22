@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Razor;
 using NLog.Web;
 using System.Globalization;
+using Microsoft.EntityFrameworkCore;
+using GymManager.Infrastructure.Persistence;
 
 namespace GymManager.UI
 {
@@ -16,6 +18,13 @@ namespace GymManager.UI
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+                //        var connectionString = builder.Configuration.GetConnectionString("ApplicationDbContextConnection") ?? throw new InvalidOperationException("Connection string 'ApplicationDbContextConnection' not found.");
+
+                //                    builder.Services.AddDbContext<ApplicationDbContext>(options =>
+                //options.UseSqlServer(connectionString));
+
+                //                                builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+                //.AddEntityFrameworkStores<ApplicationDbContext>();
 
             builder.Logging.ClearProviders();
             builder.Logging.SetMinimumLevel(LogLevel.Information);
@@ -32,10 +41,12 @@ namespace GymManager.UI
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+            //Dodane Razor Pages
+            builder.Services.AddRazorPages();
 
-            //builder.Services.AddSingleton<IEmail, Email>(); // Wszêdzie gdzie w kodzie u¿yjemy interfejsu IEmail zostanie on zast¹piony implementacj¹ klasy Email - jako, ¿e jest to Singleton to w ca³ym programie bêdzie tylko jeden obiekt klasy Email
-            //builder.Services.AddScoped<IEmail, Email>(); // Wszêdzie gdzie w kodzie u¿yjemy interfejsu IEmail zostanie on zast¹piony implementacj¹ klasy Email - jako, ¿e jest to Scoped bêdzie jedna instacja dla ce³ego requestu
-            //builder.Services.AddTransient<IEmail, Email>(); // Wszêdzie gdzie w kodzie u¿yjemy interfejsu IEmail zostanie on zast¹piony implementacj¹ klasy Email - jako, ¿e jest to Transient, bêdzie nowa instancja dla ka¿dego kontrolera lub serwisu
+            //builder.Services.AddSingleton<IEmail, Email>(); // Wszï¿½dzie gdzie w kodzie uï¿½yjemy interfejsu IEmail zostanie on zastï¿½piony implementacjï¿½ klasy Email - jako, ï¿½e jest to Singleton to w caï¿½ym programie bï¿½dzie tylko jeden obiekt klasy Email
+            //builder.Services.AddScoped<IEmail, Email>(); // Wszï¿½dzie gdzie w kodzie uï¿½yjemy interfejsu IEmail zostanie on zastï¿½piony implementacjï¿½ klasy Email - jako, ï¿½e jest to Scoped bï¿½dzie jedna instacja dla ceï¿½ego requestu
+            //builder.Services.AddTransient<IEmail, Email>(); // Wszï¿½dzie gdzie w kodzie uï¿½yjemy interfejsu IEmail zostanie on zastï¿½piony implementacjï¿½ klasy Email - jako, ï¿½e jest to Transient, bï¿½dzie nowa instancja dla kaï¿½dego kontrolera lub serwisu
 
             var app = builder.Build();
 
@@ -73,12 +84,16 @@ namespace GymManager.UI
             app.UseStaticFiles();
 
             app.UseRouting();
+                       app.UseAuthentication();
 
             app.UseAuthorization();
 
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
+
+            app.MapRazorPages();
+
 
             app.Run();
         }
