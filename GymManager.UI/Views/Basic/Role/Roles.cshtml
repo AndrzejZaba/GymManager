@@ -1,0 +1,68 @@
+﻿@using GymManager.Application.Roles.Queries.GetRoles;
+@using System.Globalization;
+@model IEnumerable<RoleDto>
+
+@{
+    ViewData["Title"] = "Role";
+    var locale = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+}
+
+@section Styles{
+    <partial name="Styles/_DataTablesStyles" />
+}
+
+<div class="card card-primary card-border-top">
+
+    <div class="card-body">
+
+        <table id="roles" class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Nazwa roli</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @foreach(var role in Model)
+                {
+                    <tr>
+                        <td>@role.Name</td>
+                        <td>
+
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+
+    </div>
+
+</div>
+
+@section Scripts {
+<partial name="Scripts/_DataTablesScripts" />
+
+    <script>
+
+    $(document).ready(function () {
+
+        roles = $('#roles').DataTable({
+            paging: true,
+            ordering: true,
+            info: true,
+            responsive: true,
+            autoWidth: false,
+            lengthChange: true,
+            language: {
+                url: `/lib/datatables/lang/${'@locale'}.json`
+            },
+            order: [[0, "asc"]]
+        });
+
+
+    });
+
+    </script>
+}
