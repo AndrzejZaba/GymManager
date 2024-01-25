@@ -45,6 +45,8 @@ public static class DependencyInjection
         services.AddScoped<IDateTimeService, DateTimeService>();
         services.AddSingleton<IEmail, Email>();
         services.AddSingleton<IAppSettingsService, AppSettingsService>();
+        services.AddHttpContextAccessor();
+        services.AddSingleton<ICurrentUserService, CurrentUserService>();
 
 
         return services;
