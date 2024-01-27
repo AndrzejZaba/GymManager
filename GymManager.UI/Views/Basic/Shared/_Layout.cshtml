@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/GymManager.UI.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/lib/toastr.js/toastr.min.css" />
 
     @await RenderSectionAsync("Styles", required:false)
 
@@ -20,7 +21,7 @@
 <body style="background-color: rgb(244,246,249)">
 
     <div class="container-fluid">
-        <div class="row flex-wrap">
+        <div class="row flex-nowrap">
 
             <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-secondary">
                 <div class="d-flex flex-column align-items-center align-items-sm-start
@@ -81,9 +82,12 @@
     <script src="~/lib/jquery.cookie/jquery.cookie.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
-
+    <script src="~/lib/toastr.js/toastr.min.js"></script>
 
 
     @await RenderSectionAsync("Scripts", required: false)
+
+    <partial name="_NotificationPartial" />
+
 </body>
 </html>
