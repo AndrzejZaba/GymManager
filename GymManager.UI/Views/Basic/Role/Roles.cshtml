@@ -22,8 +22,10 @@
         <table id="roles" class="table table-bordered">
             <thead>
                 <tr>
-                    <th>Nazwa roli</th>
-                    <th></th>
+                    <th>
+                        Nazwa roli
+                    </th>
+                    <th class="desktop"></th>
                 </tr>
             </thead>
             <tbody>
@@ -31,9 +33,12 @@
                 @foreach(var role in Model)
                 {
                     <tr>
-                        <td>@role.Name</td>
                         <td>
-
+                            <a class="edit-link" href="/Role/EditRole?id=@role.Id">@role.Name</a></td>
+                        <td>
+                            <a class="btn btn-success btn-sm" role="button" href="/Role/EditRole?id=@role.Id">
+                                <i class="fas fa-solid fa-magnifying-glass"></i>Edytuj
+                            </a>
                         </td>
                     </tr>
                 }

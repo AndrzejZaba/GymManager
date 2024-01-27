@@ -111,3 +111,7 @@ ul.client-panel li.nav-item.active{
     margin-bottom: 0.5rem;
     font-weight: bold;
 }
+
+a.edit-link{
+    color: black;
+}
