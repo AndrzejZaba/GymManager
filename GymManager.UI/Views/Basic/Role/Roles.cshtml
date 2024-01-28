@@ -11,6 +11,15 @@
     <partial name="Styles/_DataTablesStyles" />
 }
 
+<partial name="Modals/_ModalConfirm" 
+        model="@(new ModalParams
+        {
+            Id = "modal-confirm-delete",
+            Title = "Potwierdź proszę",
+            Description = "Czy na pewno chcesz usunąć wybraną rolę?"
+})" />
+
+
 <div class="card card-primary card-border-top">
 
     <div class="card-body">
@@ -70,6 +79,7 @@
                 order: [[0, "asc"]]
             });
 
+            $('#modal-confirm-delete').modal('show');
 
         });
 
@@ -86,9 +96,16 @@
                 },
                 error: function (data) {
 
-                }
-            })
+                },
+                dataType: "json"
+            });
         }
+
+        $('#modal-confirm-delete-btn').on('click', function (e){
+            $('#modal-confirm-delete').modal('hide');
+
+            console.log('kliknięty przycisk TAK');
+        });
 
     </script>
 }
