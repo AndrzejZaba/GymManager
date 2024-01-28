@@ -62,4 +62,17 @@ public class RoleManagerService : IRoleManagerService
 
         return new RoleDto {  Id = role.Id, Name = role.Name };
     }
+
+    public async Task DeleteAsync(string id)
+    {
+        var roleDb = await _roleManager.FindByIdAsync(id);
+
+        var result = await _roleManager.DeleteAsync(roleDb);
+
+        if (!result.Succeeded)
+            throw new Exception(string.Join(". ", result.Errors.Select(x => x.Description)));
+    }
+
+
+
 }
