@@ -55,23 +55,40 @@
 
     <script>
 
-    $(document).ready(function () {
+        $(document).ready(function () {
 
-        roles = $('#roles').DataTable({
-            paging: true,
-            ordering: true,
-            info: true,
-            responsive: true,
-            autoWidth: false,
-            lengthChange: true,
-            language: {
-                url: `/lib/datatables/lang/${'@locale'}.json`
-            },
-            order: [[0, "asc"]]
+            roles = $('#roles').DataTable({
+                paging: true,
+                ordering: true,
+                info: true,
+                responsive: true,
+                autoWidth: false,
+                lengthChange: true,
+                language: {
+                    url: `/lib/datatables/lang/${'@locale'}.json`
+                },
+                order: [[0, "asc"]]
+            });
+
+
         });
 
+        function callAjax() {
 
-    });
+            $.ajax({
+                type: "POST",
+                url: "",
+                data: {
+                    
+                },
+                success: function (data) {
+
+                },
+                error: function (data) {
+
+                }
+            })
+        }
 
     </script>
 }
