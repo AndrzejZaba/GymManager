@@ -10,6 +10,10 @@
 
     <div class="card-body">
 
+        <a href="/Client/EditClient" class="btn btn-primary mb-3" role="button">
+            <i class="fas fa-solid fa-circle-plus"></i>Aktualizuj swoje dane.
+        </a>
+
         @if (string.IsNullOrWhiteSpace(Model.FirstName))
         {
             <p class="text-danger mt-2"><b>Uzupełnij proszę swoje dane.</b></p>
