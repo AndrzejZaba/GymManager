@@ -77,13 +77,20 @@
 
         </div>
 
-        <div>
-                <div class="card-footer">
-                    <button type="submit" class="btn btn-primary btn-lg">
-                        <i class="fas fa-solid fa-circle-check"></i>Zapisz
-                    </button>
-                </div>
-            </div>
+        <div class="card-footer">
+            <button type="submit" class="btn btn-primary btn-lg mr-3">
+            <i class="fas fa-solid fa-circle-check"></i>Zapisz
+            </button>
+            <a href="/Client/Client" class="btn btn-secondary btn-lg" role="button">
+            <i class="fas fa-solid fa-cancel"></i>Anuluj
+            </a>
+        </div>
+
+
+        
+
+            
+
 
     }
 
@@ -95,7 +102,7 @@
 
     <partial name="Scripts/_ValidationScriptsPartial" />
 
-
+    <script src="~/lib/inputmask/jquery.inputmask.bundle.min.js"></script>
 
     <script>
         $(document).ready(function() {
@@ -103,6 +110,8 @@
             if ('@Model.IsPrivateAccount.ToString().ToUpper()' == 'FALSE'){
                 $("#divNipNumber").show();
             }
+
+            $("#ZipCode").inputmask("99-999", {"clearIncomplete": true, showMaskOnHover: false });
 
         });
 
