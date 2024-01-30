@@ -10,6 +10,7 @@ using NLog.Web;
 using System.Globalization;
 using Microsoft.EntityFrameworkCore;
 using GymManager.Infrastructure.Persistence;
+using DataTables.AspNet.AspNetCore;
 
 namespace GymManager.UI
 {
@@ -29,6 +30,8 @@ namespace GymManager.UI
 
             builder.Services.AddApplication();
             builder.Services.AddInfrastructure(builder.Configuration);
+
+            builder.Services.RegisterDataTables();
 
             builder.Services.DefineViewLocation(builder.Configuration);
 

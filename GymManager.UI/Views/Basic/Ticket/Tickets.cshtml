@@ -44,7 +44,7 @@
             language: {
                     url: `/lib/datatables/lang/${'@locale'}.json`
                 },
-            order: [[1, desc]],
+            order: [[1, "desc"]],
             processing: true,
             serverSide: true,
             ajax: "/Ticket/TicketsDataTable",
@@ -64,7 +64,7 @@
                     name: 'operations',
                     data: null,
                     title: '',
-                    className: 'desktop'
+                    className: 'desktop',
                     sortable: false,
                     searchable: false,
                     render: function(data, type, row){
