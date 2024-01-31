@@ -8,21 +8,10 @@ using System.Threading.Tasks;
 
 namespace GymManager.Application.Tickets.Commands.AddTicket;
 
-public class AddTicketCommandHandler : IRequestHandler<AddTicketCommand>
+public class AddTicketCommandHandler : IRequestHandler<AddTicketCommand, string>
 {
-    private readonly ILogger<AddTicketCommandHandler> _logger;
-
-    public AddTicketCommandHandler(ILogger<AddTicketCommandHandler> logger)
+    public async Task<string> Handle(AddTicketCommand request, CancellationToken cancellationToken)
     {
-        _logger = logger;
-    }
-    public async Task<Unit> Handle(AddTicketCommand request, CancellationToken cancellationToken)
-    {
-        //var ticket = new Ticket();
-        //ticket.Name = request.Name;
-
-        //zapis do bazy danych
-        
-        return Unit.Value;
+        throw new NotImplementedException();
     }
 }

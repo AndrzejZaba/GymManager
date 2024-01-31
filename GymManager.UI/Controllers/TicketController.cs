@@ -1,4 +1,6 @@
 ﻿using DataTables.AspNet.Core;
+using GymManager.Application.Clients.Queries.GetClient;
+using GymManager.Application.Tickets.Queries.GetAddTicket;
 using GymManager.Application.Tickets.Queries.GetClientsTickets;
 using GymManager.UI.Extensions;
 using Microsoft.AspNetCore.Authorization;
@@ -9,9 +11,11 @@ namespace GymManager.UI.Controllers
     [Authorize]
     public class TicketController : BaseController
     {
-        public IActionResult Tickets()
+        public async Task<IActionResult> Tickets()
         {
-            return View();
+            var isUserDataCompleted = !string.IsNullOrWhiteSpace((await Mediator.Send(new GetClientQuery { UserId = UserId })).FirstName);
+
+            return View(isUserDataCompleted);
         }
 
         public async Task<IActionResult> TicketsDataTable(IDataTablesRequest request)
@@ -26,6 +30,11 @@ namespace GymManager.UI.Controllers
             });
 
             return request.GetResponse(tickets);
+        }
+
+        public async Task<IActionResult> AddTicket()
+        {
+            return View(await Mediator.Send(new GetAddTicketQuery())); 
         }
 
     }
