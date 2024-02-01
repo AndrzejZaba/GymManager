@@ -1,5 +1,6 @@
 ﻿using DataTables.AspNet.Core;
 using GymManager.Application.Clients.Queries.GetClient;
+using GymManager.Application.Tickets.Commands.AddTicket;
 using GymManager.Application.Tickets.Queries.GetAddTicket;
 using GymManager.Application.Tickets.Queries.GetClientsTickets;
 using GymManager.UI.Extensions;
@@ -35,6 +36,27 @@ namespace GymManager.UI.Controllers
         public async Task<IActionResult> AddTicket()
         {
             return View(await Mediator.Send(new GetAddTicketQuery())); 
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddTicket(AddTicketVm vm)
+        {
+            var result = await MediatorSendValidate(new AddTicketCommand
+            {
+                StartDate = vm.Ticket.StartDate,
+                TicketTypeId = vm.Ticket.TicketTypeId,
+                UserId = UserId,
+                Price = vm.Ticket.Price,
+            });
+
+            if (!result.IsValid)
+                return View(vm);
+
+            TempData["Success"] = "Nowy karnet został utworzony. Oczekiwanie na zweryfikowanie płatności.";
+
+            return RedirectToAction("Tickets");
+
         }
 
     }
