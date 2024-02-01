@@ -123,3 +123,7 @@ ul.client-panel li.nav-item.active{
 a.edit-link{
     color: black;
 }
+
+.input-group-text.calendar{
+    font-size: 1.5rem;
+}
