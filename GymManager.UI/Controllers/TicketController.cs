@@ -12,6 +12,13 @@ namespace GymManager.UI.Controllers
     [Authorize]
     public class TicketController : BaseController
     {
+        private readonly IConfiguration _configuration;
+
+        public TicketController(IConfiguration configuration)
+        {
+            _configuration = configuration;
+        }
+
         public async Task<IActionResult> Tickets()
         {
             var isUserDataCompleted = !string.IsNullOrWhiteSpace((await Mediator.Send(new GetClientQuery { UserId = UserId })).FirstName);
@@ -55,7 +62,12 @@ namespace GymManager.UI.Controllers
 
             TempData["Success"] = "Nowy karnet został utworzony. Oczekiwanie na zweryfikowanie płatności.";
 
-            return RedirectToAction("Tickets");
+            // Dodanie karnetu z płatnością
+            return Redirect($"{_configuration.GetValue<string>("Przelewy24:BaseUrl")}/trnRequest/{result.Model}");
+
+
+            // Dodanie karnetu bez płatności
+            //return RedirectToAction("Tickets");
 
         }
 

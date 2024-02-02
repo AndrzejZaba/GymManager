@@ -1,6 +1,7 @@
 ﻿using GymManager.Application.Common.Interfaces;
 using GymManager.Domain.Entities;
 using GymManager.Infrastructure.Identity;
+using GymManager.Infrastructure.Payments;
 using GymManager.Infrastructure.Persistence;
 using GymManager.Infrastructure.Services;
 using Microsoft.AspNetCore.Builder;
@@ -49,6 +50,8 @@ public static class DependencyInjection
         services.AddSingleton<IAppSettingsService, AppSettingsService>();
         services.AddHttpContextAccessor();
         services.AddSingleton<ICurrentUserService, CurrentUserService>();
+        services.AddSingleton<IHttpContext, MyHttpContext>();
+        services.AddHttpClient<IPrzelewy24, Przelewy24>(); 
 
 
         return services;
