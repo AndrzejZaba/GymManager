@@ -60,8 +60,8 @@
             autoWidth: false,
             lengthChange: true,
             language: {
-                    url: `/lib/datatables/lang/${'@locale'}.json`
-                },
+                url: `/lib/datatables/lang/${'@locale'}.json`
+            },
             order: [[1, "desc"]],
             processing: true,
             serverSide: true,
@@ -70,27 +70,31 @@
                 {
                     name: 'StartDate',
                     data: 'startDate',
-                    title: 'Data od',
-                    className: 'desktop'
+                    title: "Data od",
+                    className: "desktop"
                 },
                 {
                     name: 'EndDate',
                     data: 'endDate',
-                    title: 'Data do',
+                    title: "Data do"
                 },
                 {
                     name: 'operations',
                     data: null,
                     title: '',
-                    className: 'desktop',
+                    className: "desktop",
                     sortable: false,
                     searchable: false,
-                    render: function(data, type, row){
-                        var payBtn = '';
+                    render: function (data, type, row) {
+                        var payBtn = '', previewBtn = '', pdfBtn = '', printBtn = '';
 
-                        payBtn = '<span class="badge bg-warning text-dark">Weryfikacja</span>';
+                        if (row.isPaid) {
+                            previewBtn = '<a class="btn btn-success btn-sm" role="button" href="/Ticket/TicketPreview?Id='+row.id+'"><i class="fas fa-solid fa-square-check"></i>Zobacz</a>';
+                        }else{
+                            payBtn = '<span class="badge bg-warning text-dark">Weryfikacja</span>';
+                        }
 
-                        return payBtn;
+                        return previewBtn + payBtn;
                     }
                 }
             ]
