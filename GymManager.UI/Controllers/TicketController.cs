@@ -63,11 +63,11 @@ namespace GymManager.UI.Controllers
             TempData["Success"] = "Nowy karnet został utworzony. Oczekiwanie na zweryfikowanie płatności.";
 
             // Dodanie karnetu z płatnością
-            return Redirect($"{_configuration.GetValue<string>("Przelewy24:BaseUrl")}/trnRequest/{result.Model}");
+            //return Redirect($"{_configuration.GetValue<string>("Przelewy24:BaseUrl")}/trnRequest/{result.Model}");
 
 
             // Dodanie karnetu bez płatności
-            //return RedirectToAction("Tickets");
+            return RedirectToAction("Tickets");
 
         }
 

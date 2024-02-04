@@ -9,8 +9,8 @@ namespace GymManager.UI.Controllers;
 public abstract class BaseController : Controller
 {
 
-    private ISender _mediatr;
-    protected ISender Mediator => _mediatr ??= HttpContext.RequestServices.GetService<ISender>();
+    private ISender _mediator;
+    protected ISender Mediator => _mediator ??= HttpContext.RequestServices.GetService<ISender>();
     protected string UserId => User.FindFirstValue(ClaimTypes.NameIdentifier);
 
     protected async Task<MediatorValidateResponse<T>> MediatorSendValidate<T>

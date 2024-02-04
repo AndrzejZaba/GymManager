@@ -30,7 +30,8 @@ public class AddTicketCommandHandler : IRequestHandler<AddTicketCommand, string>
         var sessionId = Guid.NewGuid().ToString();
 
         //dodanie nowej transakcji przez system płatności
-        var token = await AddTransactionPrzelewy24(request, sessionId);
+        //var token = await AddTransactionPrzelewy24(request, sessionId);
+        var token = "123";
 
         await AddToDatabase(request, sessionId, token, cancellationToken);
 
