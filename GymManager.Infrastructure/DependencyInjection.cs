@@ -2,14 +2,16 @@
 using GymManager.Domain.Entities;
 using GymManager.Infrastructure.Identity;
 using GymManager.Infrastructure.Payments;
+using GymManager.Infrastructure.Pdf;
 using GymManager.Infrastructure.Persistence;
 using GymManager.Infrastructure.Services;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-
+using Rotativa.AspNetCore;
 
 namespace GymManager.Infrastructure;
 
@@ -53,6 +55,7 @@ public static class DependencyInjection
         services.AddSingleton<IHttpContext, MyHttpContext>();
         services.AddHttpClient<IPrzelewy24, Przelewy24>();
         services.AddScoped<IQrCodeGenerator, QrCodeGenerator>();
+        services.AddScoped<IPdfFileGenerator, RotativaPdfGenerator>();
 
 
         return services;
@@ -62,10 +65,14 @@ public static class DependencyInjection
         this IApplicationBuilder app,
         IApplicationDbContext context,
         IAppSettingsService appSettingsService,
-        IEmail email)        
+        IEmail email,
+        IWebHostEnvironment webHostEnvironment)        
     {
         appSettingsService.Update(context).GetAwaiter().GetResult();
         email.Update(appSettingsService).GetAwaiter().GetResult();
+
+        RotativaConfiguration.Setup(webHostEnvironment.WebRootPath, "Rotativa");
+
         return app;
     }
 }

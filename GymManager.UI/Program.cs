@@ -26,6 +26,8 @@ namespace GymManager.UI
 
             builder.Services.AddCulture();
 
+            builder.Services.AddSession();
+
             builder.Services.AddReCaptcha(builder.Configuration.GetSection("ReCaptcha"));
 
             builder.Services.AddApplication();
@@ -36,7 +38,9 @@ namespace GymManager.UI
             builder.Services.DefineViewLocation(builder.Configuration);
 
             // Add services to the container.
-            builder.Services.AddControllersWithViews();
+            builder.Services
+                .AddControllersWithViews()
+                .AddSessionStateTempDataProvider();
             //Dodane Razor Pages
             builder.Services.AddRazorPages();
 
@@ -46,12 +50,15 @@ namespace GymManager.UI
 
             var app = builder.Build();
 
+            app.UseSession();
+
             using (var scope = app.Services.CreateScope())
             {
                 app.UseInfrastructure(
                     scope.ServiceProvider.GetRequiredService<IApplicationDbContext>(),
                     app.Services.GetService<IAppSettingsService>(),
-                    app.Services.GetService<IEmail>());
+                    app.Services.GetService<IEmail>(),
+                    app.Services.GetService<IWebHostEnvironment>());
             }
 
             // Configure the HTTP request pipeline.

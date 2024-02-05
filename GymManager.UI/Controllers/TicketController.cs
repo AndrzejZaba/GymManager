@@ -3,6 +3,7 @@ using GymManager.Application.Clients.Queries.GetClient;
 using GymManager.Application.Tickets.Commands.AddTicket;
 using GymManager.Application.Tickets.Queries.GetAddTicket;
 using GymManager.Application.Tickets.Queries.GetClientsTickets;
+using GymManager.Application.Tickets.Queries.GetPdfTicket;
 using GymManager.Application.Tickets.Queries.GetPrintTicket;
 using GymManager.UI.Extensions;
 using Microsoft.AspNetCore.Authorization;
@@ -14,10 +15,14 @@ namespace GymManager.UI.Controllers
     public class TicketController : BaseController
     {
         private readonly IConfiguration _configuration;
+        private readonly ILogger _logger;
 
-        public TicketController(IConfiguration configuration)
+        public TicketController(
+            IConfiguration configuration,
+            ILogger<TicketController> logger)
         {
             _configuration = configuration;
+            _logger = logger;
         }
 
         public async Task<IActionResult> Tickets()
@@ -81,6 +86,43 @@ namespace GymManager.UI.Controllers
             });
 
             return View(ticket);
+        }
+
+        public async Task<IActionResult> TicketToPdf(string id)
+        {
+            try
+            {
+                var ticketPdfVm = await Mediator.Send(new GetPdfTicketQuery
+                {
+                    TicketId = id,
+                    UserId = UserId,
+                    Context = ControllerContext
+                });
+
+                TempData.Put(ticketPdfVm.Handle, ticketPdfVm.PdfContent);
+
+                return Json(new
+                {
+                    success = true,
+                    fileGuid = ticketPdfVm.Handle,
+                    fileName = ticketPdfVm.FileName
+                });
+            }
+            catch (Exception exception)
+            {
+                _logger.LogError(exception, null);
+                
+                return Json(new { success = false });
+            }
+        }
+
+        public IActionResult DownloadTicketPdf(string fileGuid, string fileName)
+        {
+            if (TempData[fileGuid] == null)
+                throw new Exception("Błąd przy próbie eksportu karnetu do PDF.");
+            
+            return File(TempData.Get<byte[]>(fileGuid), "application/pdf", fileName);
+
         }
 
     }
