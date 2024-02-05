@@ -51,7 +51,8 @@ public static class DependencyInjection
         services.AddHttpContextAccessor();
         services.AddSingleton<ICurrentUserService, CurrentUserService>();
         services.AddSingleton<IHttpContext, MyHttpContext>();
-        services.AddHttpClient<IPrzelewy24, Przelewy24>(); 
+        services.AddHttpClient<IPrzelewy24, Przelewy24>();
+        services.AddScoped<IQrCodeGenerator, QrCodeGenerator>();
 
 
         return services;
