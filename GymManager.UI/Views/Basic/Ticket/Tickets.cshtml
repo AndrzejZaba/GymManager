@@ -91,13 +91,15 @@
                         if (row.isPaid) {
                             previewBtn = '<a class="btn btn-success btn-sm" role="button" href="/Ticket/TicketPreview?Id='+row.id+'"><i class="fas fa-solid fa-square-check"></i>Zobacz</a>';
                         
-                            pdfBtn = '<button class="btn btn-secondary btn-sm ms-1" onclick="generateTicket(\''+row.id+'\')"><i class="fas fa-solid fa-file-pdf"></i>PDF</button>'
+                            pdfBtn = '<button class="btn btn-secondary btn-sm ms-1" onclick="generateTicket(\''+row.id+'\')"><i class="fas fa-solid fa-file-pdf"></i>PDF</button>';
                         
+                            printBtn = '<button class="btn btn-secondary btn-sm ms-1" onclick="printTicket(\''+row.id+'\')"><i class="fas fa-solid fa-print"></i>Drukuj</button>';
+
                         }else{
                             payBtn = '<span class="badge bg-warning text-dark">Weryfikacja</span>';
                         }
 
-                        return previewBtn + payBtn + pdfBtn;
+                        return previewBtn + payBtn + pdfBtn + printBtn;
                     }
                 }
             ]
@@ -128,7 +130,19 @@
             cache: false
         });
 
+    }
 
+    function printTicket(id) {
+        var url = '@Url.Action("PrintTicket", "Ticket")' + '?id=' + id;
+
+        var myWindow = window.open(url, '', 'width=800,height=600');
+
+        myWindow.onload = function () {
+            myWindow.print();
+            myWindow.onafterprint = function () {
+                myWindow.close();
+            }
+        }
     }
 
 </script>

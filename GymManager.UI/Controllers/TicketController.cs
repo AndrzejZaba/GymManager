@@ -124,6 +124,17 @@ namespace GymManager.UI.Controllers
             return File(TempData.Get<byte[]>(fileGuid), "application/pdf", fileName);
 
         }
+        
+        public async Task<IActionResult> PrintTicket(string id)
+        {
+            var ticket = await Mediator.Send(new GetPrintTicketQuery 
+            { 
+                TicketId = id,
+                UserId = UserId
+            });
+
+            return View("ticketPreview", ticket);
+        }
 
     }
 }
