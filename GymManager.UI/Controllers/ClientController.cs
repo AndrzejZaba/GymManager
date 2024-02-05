@@ -1,5 +1,6 @@
 ﻿using GymManager.Application.Clients.Commands.EditClient;
 using GymManager.Application.Clients.Queries.GetClient;
+using GymManager.Application.Clients.Queries.GetClientDashboard;
 using GymManager.Application.Clients.Queries.GetEditClient;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -9,9 +10,12 @@ namespace GymManager.UI.Controllers;
 [Authorize]
 public class ClientController : BaseController
 {
-    public IActionResult Dashboard()
+    public async Task<IActionResult> Dashboard()
     {
-        return View();
+        return View(await Mediator.Send(new GetClientDashboardQuery
+        {
+            UserId = UserId
+        }));
     }
     public async Task<IActionResult> Client()
     {
