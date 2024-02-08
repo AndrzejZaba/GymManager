@@ -1,6 +1,7 @@
 ﻿using GymManager.Application.Common.Exceptions;
 using GymManager.Application.Dictionaries;
 using GymManager.Application.Files.Commands.UploadFile;
+using GymManager.Application.Files.Queries.GetFiles;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,7 +18,7 @@ public class FileController : BaseController
     }
     public async Task<IActionResult> Files()
     {
-        return View();
+        return View(await Mediator.Send(new GetFilesQuery()));
     }
 
     [HttpPost]

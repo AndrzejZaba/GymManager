@@ -1,9 +1,14 @@
-﻿@{
+﻿@using GymManager.Application.Common.Extensions;
+@using GymManager.Application.Files.Queries.GetFiles;
+@model IEnumerable<FileDto>
+
+@{
     ViewData["Title"] = "Pliki";
 }
 
 @section Styles{
     <link rel="stylesheet" href="~/lib/dropzone/min/dropzone.min.css" />
+    <link rel="stylesheet" href="~/lib/venobox/venobox.min.css" />
 }
 
 <div class="card card-primary card-border-top">
@@ -90,6 +95,27 @@
             </div>
         </div>
 
+        <div class="mt-5">
+            <div class="row">
+
+                @foreach (var file in Model)
+                {
+                    <div id="file_@file.Id" class="col-sm-1 text-center mt-auto">
+
+                        <a href="@file.Url" class="venobox-link" title="@file.Name" data-gall="gallery">
+                            <img src="@file.Url" class="img-fluid" alt="@file.Name" />
+                        </a>
+
+                        <div class="my-1 file-name">
+                            <small>@file.Name.TakeFirstNChar(30)</small>
+                        </div>
+
+
+                    </div>
+                }
+
+            </div>
+        </div>
 
     </div>
 
@@ -99,9 +125,16 @@
 
 @section Scripts {
     <script src="~/lib/dropzone/min/dropzone.min.js"></script>
+    <script src="~/lib/venobox/venobox.min.js"></script>
 
 
     <script>
+
+        $(document).ready(function () {
+            $('.venobox-link').venobox({
+                numeratio: true
+            });
+        });
 
         Dropzone.autoDiscover = false;
 
