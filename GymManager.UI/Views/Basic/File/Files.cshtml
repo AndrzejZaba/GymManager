@@ -128,7 +128,12 @@
                 if(response.success){
                     toastr.success('Plik został wysłany na serwer.');
                 }else{
-                    toastr.error('Błąd. Nie udało się wysłać pliku. Spróbuj ponownie, lub skontaktuj się z administratorem.')
+                    if(response.message) {
+                        toastr.error('Błąd. Nie udało się wysłać pliku. ' + response.message + ' Spróbuj ponownie, lub skontaktuj się z administratorem.')
+                    } else{
+                        toastr.error('Błąd. Nie udało się wysłać pliku. Spróbuj ponownie, lub skontaktuj się z administratorem.')
+                    }
+
                 }
 
             }
