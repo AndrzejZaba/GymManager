@@ -1,5 +1,6 @@
 ﻿using GymManager.Application.Common.Exceptions;
 using GymManager.Application.Dictionaries;
+using GymManager.Application.Files.Commands.DeleteFile;
 using GymManager.Application.Files.Commands.UploadFile;
 using GymManager.Application.Files.Queries.GetFiles;
 using Microsoft.AspNetCore.Authorization;
@@ -50,4 +51,24 @@ public class FileController : BaseController
             return Json(new { success = false });
         }
     }
+
+
+    [HttpPost]
+    public async Task<IActionResult> DeleteFile(int id)
+    {
+
+        try
+        {
+            await Mediator.Send(new DeleteFileCommand { Id = id });
+
+            return Json(new { success = true });
+        }
+        catch (Exception exception)
+        {
+            _logger.LogError(exception, null);
+            return Json(new { success = false });
+        }
+
+    }
+
 }

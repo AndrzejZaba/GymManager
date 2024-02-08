@@ -12,6 +12,13 @@ public class FileManagerService : IFileManagerService
     {
         _webHostEnvironment = webHostEnvironment;
     }
+
+    public void Delete(string name)
+    {
+        var fileFullPath = Path.Combine(_webHostEnvironment.WebRootPath, "Content", "Files", name);
+        File.Delete(fileFullPath);
+    }
+
     public async Task Upload(IEnumerable<IFormFile> files)
     {
         var folderRoot = Path.Combine(_webHostEnvironment.WebRootPath, "Content", "Files");

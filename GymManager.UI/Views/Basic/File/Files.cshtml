@@ -11,6 +11,14 @@
     <link rel="stylesheet" href="~/lib/venobox/venobox.min.css" />
 }
 
+<partial name="Modals/_ModalConfirm" 
+        model="@(new ModalParams
+        {
+            Id = "modal-confirm-delete",
+            Title = "Potwierdź proszę",
+            Description = "Czy na pewno chcesz usunąć wybrany plik?"
+})" />
+
 <div class="card card-primary card-border-top">
 
     <div class="card-body">
@@ -110,6 +118,9 @@
                             <small>@file.Name.TakeFirstNChar(30)</small>
                         </div>
 
+                        <button class="btn btn-danger btn-sm mb-4" onclick="deleteFile('@file.Id')">
+                            <i class="fas fa-solid fa-trash-can mx-auto"></i> Usuń
+                        </button>
 
                     </div>
                 }
@@ -129,6 +140,8 @@
 
 
     <script>
+
+        var selectedFileId;
 
         $(document).ready(function () {
             $('.venobox-link').venobox({
@@ -198,6 +211,39 @@
         document.querySelector("#actions .cancel").onclick = function () {
             myDropzone.removeAllFiles(true);
         }
+
+        function deleteFile(id) {
+            selectedFileId = id;
+            $('#modal-confirm-delete').modal('show');
+        }
+
+            $('#modal-confirm-delete-btn').on('click', function(e) {
+
+                $('#modal-confirm-delete').modal('hide');
+
+                $.ajax({
+                    type: "POST",
+                    url: "/File/DeleteFile",
+                    data: {
+                        id: selectedFileId
+                    },
+                    success: function (data) {
+                        if (data.success){
+                            $('#file_' + selectedFileId).remove();
+                            toastr.success('Plik został usunięty.')
+                        } 
+                        else
+                            toastr.error('Błąd. Nie udało się usunąć wybranego pliku. Spróbuj ponownie lub skontaktuj się z administratorem.');
+                    
+                    },
+                    error: function (data) {
+                            toastr.error('Błąd. Nie udało się usunąć wybranego pliku. Spróbuj ponownie lub skontaktuj się z administratorem.');
+
+                    },
+                    dataType: "json"
+                });
+            });
+
 
     </script>
 
