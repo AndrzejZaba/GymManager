@@ -1,4 +1,5 @@
-﻿using GymManager.Application.Clients.Commands.EditClient;
+﻿using GymManager.Application.Clients.Commands.AddClient;
+using GymManager.Application.Clients.Commands.EditClient;
 using GymManager.Application.Clients.Queries.GetClient;
 using GymManager.Application.Clients.Queries.GetClientDashboard;
 using GymManager.Application.Clients.Queries.GetClientsBasics;
@@ -49,5 +50,24 @@ public class ClientController : BaseController
         return View(await Mediator.Send(new GetClientsBasicsQuery()));
     }
 
+    [Authorize(Roles = $"{RolesDict.Administrator},{RolesDict.Pracownik}")]
+    public async Task<IActionResult> AddClient()
+    {
+        return View(new AddClientCommand());
+    }
 
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    [Authorize(Roles = $"{RolesDict.Administrator},{RolesDict.Pracownik}")]
+    public async Task<IActionResult> AddClient(AddClientCommand command)
+    {
+        var result = await MediatorSendValidate(command);
+
+        if (!result.IsValid)
+            return View(command);
+
+        TempData["Success"] = "Dane o klientach zostały zaktualizowane.";
+
+        return RedirectToAction("Clients");
+    }
 }
