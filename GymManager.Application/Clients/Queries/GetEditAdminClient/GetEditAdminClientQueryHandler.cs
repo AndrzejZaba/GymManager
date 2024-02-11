@@ -31,6 +31,12 @@ namespace GymManager.Application.Clients.Queries.GetEditAdminClient
                 .FirstOrDefaultAsync(x => x.Id == request.UserId))
                 .ToEditAdminClientCommand();
 
+            vm.Client.RoleIds = (await _userRoleManagerService
+                .GetRolesAsync(request.UserId))
+                .Select(x => x.Id).ToList();
+
+            vm.AvailableRoles = _roleManagerService.GetRoles().ToList();
+
             return vm;
 
         }

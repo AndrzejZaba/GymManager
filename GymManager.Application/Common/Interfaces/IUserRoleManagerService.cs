@@ -1,13 +1,13 @@
 ﻿using GymManager.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
+
 
 namespace GymManager.Application.Common.Interfaces;
 
 public interface IUserRoleManagerService
 {
-    Task<IEnumerable<ApplicationUser>> GetUsersInRoleAsync(string  roleName);
+    Task<IEnumerable<ApplicationUser>> GetUsersInRoleAsync(string roleName);
+    Task<IEnumerable<IdentityRole>> GetRolesAsync(string userId);
+    Task AddToRoleAsync(string userId, string roleName);
+    Task RomoveFromRoleAsync(string userId, string roleName);
 }
