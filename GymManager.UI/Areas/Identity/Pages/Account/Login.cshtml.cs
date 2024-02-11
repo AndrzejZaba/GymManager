@@ -113,6 +113,15 @@ namespace GymManager.UI.Areas.Identity.Pages.Account
                 var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
+                    var user = await _signInManager.UserManager.FindByEmailAsync(Input.Email);
+
+                    if (user.IsDeleted)
+                    {
+                        await _signInManager.SignOutAsync();
+                        ModelState.AddModelError("Input.Email", "Nieprawidłowe dane logowania.");
+                        return Page();
+                    }
+
                     _logger.LogInformation("User logged in.");
                     return LocalRedirect(returnUrl);
                 }
