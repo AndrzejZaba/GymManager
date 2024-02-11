@@ -44,14 +44,14 @@
                 {
                     <tr>
                         <td>
-                            <a class="edit-link" href="/Role/EditRole?id=@client.Id">@client.Name</a>
+                            <a class="edit-link" href="/Client/EditAdminClient?clientId=@client.Id">@client.Name</a>
                         </td>
                         
                         <td>
                             @client.Email
                         </td>
                         <td>
-                            <a class="btn btn-success btn-sm" role="button" href="/Role/EditRole?id=@client.Id">
+                            <a class="btn btn-success btn-sm" role="button" href="/Client/EditAdminClient?clientId=@client.Id">
                                 <i class="fas fa-solid fa-magnifying-glass"></i>Edytuj
                             </a>
 
@@ -96,41 +96,8 @@
 
         });
 
-        function deleteRole(id, btn){
-            selectedRow = btn.parentNode.parentNode;
-            selectedRoleId = id;
-
-            $('#modal-confirm-delete').modal('show');
-
-        }
 
 
-        $('#modal-confirm-delete-btn').on('click', function (e){
-            
-            $('#modal-confirm-delete').modal('hide');
-
-            $.ajax({
-                type: "POST",
-                url: "/Role/DeleteRole",
-                data: {
-                    id: selectedRoleId
-                },
-                success: function (data) {
-                    if (data.success){
-                        clients.rows(selectedRow).remove().draw();
-                        toastr.success('Role zostały zaktualizowane.')
-                    } 
-                    else
-                        toastr.error('Błąd. ' + data.message);
-                    
-                },
-                error: function (data) {
-                        toastr.error('Błąd. Nie udało się usunąć wybranej roli. Spróbuj ponownie lub skontaktuj się z administratorem.');
-
-                },
-                dataType: "json"
-            });
-        });
 
 
   

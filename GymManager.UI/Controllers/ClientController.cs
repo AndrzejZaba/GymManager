@@ -3,6 +3,7 @@ using GymManager.Application.Clients.Commands.EditClient;
 using GymManager.Application.Clients.Queries.GetClient;
 using GymManager.Application.Clients.Queries.GetClientDashboard;
 using GymManager.Application.Clients.Queries.GetClientsBasics;
+using GymManager.Application.Clients.Queries.GetEditAdminClient;
 using GymManager.Application.Clients.Queries.GetEditClient;
 using GymManager.Application.Dictionaries;
 using Microsoft.AspNetCore.Authorization;
@@ -65,6 +66,28 @@ public class ClientController : BaseController
 
         if (!result.IsValid)
             return View(command);
+
+        TempData["Success"] = "Dane o klientach zostały zaktualizowane.";
+
+        return RedirectToAction("Clients");
+    }
+
+
+    [Authorize(Roles = $"{RolesDict.Administrator},{RolesDict.Pracownik}")]
+    public async Task<IActionResult> EditAdminClient(string clientId)
+    {
+        return View(await Mediator.Send(new GetEditAdminClientQuery { UserId = clientId }));
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    [Authorize(Roles = $"{RolesDict.Administrator},{RolesDict.Pracownik}")]
+    public async Task<IActionResult> EditAdminClient(EditAdminClientVm vm)
+    {
+        var result = await MediatorSendValidate(vm.Client);
+
+        if (!result.IsValid)
+            return View(vm);
 
         TempData["Success"] = "Dane o klientach zostały zaktualizowane.";
 
