@@ -50,7 +50,6 @@
 
             <div class="form-group">
                 @Html.LabelFor(x => x.Ticket.TicketTypeId)
-
                 <div class="select2-blue">
 
                     @Html.DropDownList("Ticket.TicketTypeId", @Model.AvailableTicketTypes.Select(
@@ -59,9 +58,7 @@
 
                     @Html.ValidationMessageFor(x => x.Ticket.TicketTypeId)
 
-
                 </div>
-
             </div>
 
 
