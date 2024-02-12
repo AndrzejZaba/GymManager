@@ -155,3 +155,7 @@ small, .small{
 .select2-container--default .select2-selection--multiple .select2-selection__choice__remove{
     color: #fff;
 }
+
+.fileBrowse:hover{
+    cursor:pointer;
+}

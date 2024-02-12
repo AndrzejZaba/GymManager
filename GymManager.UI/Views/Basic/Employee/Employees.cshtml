@@ -111,7 +111,7 @@
 
             $('#isActiveUserCb').change(function(){
                 var cookiesIsActiveUserCbVal = this.checked === true ? "1" : "0";
-                $.cookie("isActiveUserCb", cookiesIsActiveUserCbVal, {path: '/Client', expires: 365});
+                $.cookie("isActiveUserCb", cookiesIsActiveUserCbVal, {path: '/Employee', expires: 365});
             });
 
             clients = $('#employees').DataTable({

@@ -71,4 +71,23 @@ public class FileController : BaseController
 
     }
 
+
+    [HttpPost]
+    public async Task<IActionResult> GetFiles()
+    {
+
+        try
+        {
+            var files = await Mediator.Send(new GetFilesQuery());
+
+            return Json(new { success = true, images = files });
+        }
+        catch (Exception exception)
+        {
+            _logger.LogError(exception, null);
+            return Json(new { success = false });
+        }
+
+    }
+
 }

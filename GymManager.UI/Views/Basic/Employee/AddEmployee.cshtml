@@ -15,6 +15,8 @@
     <partial name="Styles/_SelectStyles" />
 }
 
+<partial name="Modals/_ModalChooseFile" />
+
 <div class="card card-primary card-border-top">
 
     @using (Html.BeginForm("AddEmployee", "Employee"))
@@ -109,9 +111,17 @@
                 @Html.ValidationMessageFor(x => x.Salary)
             </div>
 
-            <div class="form-group">
+            <div class="form-group mt-3">
                 @Html.LabelFor(x => x.ImageUrl)
-                @Html.TextBoxFor(x => x.ImageUrl, new { @class = "form-control", placeholder="Wybierz zdjęcie profilowe " })
+
+                <div class="input-group">
+                    @Html.TextBoxFor(x => x.ImageUrl, new { @class = "form-control", @readonly="readonly", placeholder="Wybierz zdjęcie profilowe " })
+                    <span onclick="fileBrowse('ImageUrl'); return false;" class="fileBrowse input-group-text bg-primary px-3 text-white">
+                        <i class="fas fa-solid fa-file-arrow-up"></i>Wybierz plik...</span>
+                    <span onclick="clearFile('ImageUrl'); return false;" class="fileBrowse input-group-text bg-danger px-3 text-white">
+                        <i class="fas fa-solid fa-file-excel"></i>Wyczyść</span>
+                </div>
+
                 @Html.ValidationMessageFor(x => x.ImageUrl)
             </div>
 
@@ -163,6 +173,9 @@
     <script src="~/lib/inputmask/jquery.inputmask.bundle.min.js"></script>
 
     <script>
+
+        var selectedFileBrowseId;
+
         $(document).ready(function() {
 
             $('#dtpDateOfEmployment').datetimepicker({
@@ -179,6 +192,73 @@
 
         });
 
-       
+        function clearFile (idName) {
+            $('#' + idName).val('');
+        }
+        
+        function fileBrowse (idName) {
+            $('#modal-files').empty();
+            selectedFileBrowseId = idName;
+            $('#modal-choose-file').modal('show');
+
+            var url = '@Url.Action("GetFiles", "File")';
+
+            var errorMessage = 'Błąd. Nie udało się pobrać zdjęć. Spróbuj ponownie lub skontaktuj się z Administratorem.'
+
+            $.ajax({
+                type: "POST",
+                url: url,
+                success: function (data) {
+                    if (data.success){
+                        
+                        var images = data.images;
+
+                        if (images.length == 0){
+                            $('#modal-files').append("<p class='ms-3 mt-3'>Brak zdjęć o wymaganym formacie na serwerze. Wyślij najpierw plik na serwer.</p>");
+                            return;
+                        }
+
+                        var divHtml = '';
+
+                        for (let index in images) {
+                            divHtml += '<div class="col-sm-2 text-center mt-auto"><img src="'+images[index].url+'" class="img-fluid" /><div class="my-1"><small>'+takeFirstNChar(images[index].name, 30)+'</small></div><button class="btn btn-primary btn-sm mb-4" onclick="chooseFile('+"'"+ images[index].name +"'" +')"><i class="fas fa-solid fa-circle-check"></i>Wybierz</button></div>';
+                        }
+
+                        $('#modal-files').append(divHtml);
+                        return;
+
+                    } 
+                    else
+                        toastr.error(errorMessage);
+                    
+                },
+                error: function (data) {
+                        toastr.error(errorMessage);
+
+                }, 
+                dataType: "json"
+            });
+
+        }
+
+        function chooseFile(name) {
+            $('#modal-choose-file').modal('hide');
+            $('#' + selectedFileBrowseId).val(name);
+        }
+
+       $('#modal-choose-file-btn').on('click', function(e){
+           window.location.href = 'file/files';
+       });
+
+       function takeFirstNChar(model, maxLength) {
+            if(!model)
+                return '';
+
+            if(model.length <= maxLength)
+                return model;
+
+            return model.substring(0, maxLength - 3) + "..."
+       }
+
     </script>
 }
