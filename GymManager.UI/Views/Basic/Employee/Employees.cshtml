@@ -1,0 +1,197 @@
+﻿@using System.Globalization;
+@using GymManager.Application.Employees.Queries.GetEmployeeBasics;
+@model IEnumerable<EmployeeBasicsDto>
+
+@{
+    ViewData["Title"] = "Pracownicy";
+    var locale = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+}
+
+@section Styles{
+    <partial name="Styles/_DataTablesStyles" />
+}
+
+<partial name="Modals/_ModalConfirm" 
+        model="@(new ModalParams
+        {
+            Id = "modal-confirm-delete",
+            Title = "Potwierdź proszę",
+            Description = "Czy na pewno chcesz usunąć wybranego klienta?"
+})" />
+
+
+<div class="card card-primary card-border-top">
+
+    <div class="card-body">
+
+        <a href="/Client/AddClient" class="btn btn-primary mb-3 " role="button">
+            <i class="fas fa-solid fa-circle-plus"></i>Dodaj klienta.
+        </a>
+
+        <div class="form-group mt-0">
+            <div class="form-check form-check-inline form-switch mt-0">
+                <div class="custom-control custom-switch">
+                    <input type="checkbox" class="form-check-input" id="isActiveUserCb" onclick="refreshTable();" />
+                    <label class="form-check-label custom-control-label" for="isActiveUserCb">
+                        Tylko aktywni
+                    </label>
+                </div>
+            </div>
+        </div>
+
+
+        <table id="employees" class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Nazwa Pracownika</th>
+                    <th class="desktop">Email</th>
+                    <th class="desktop"></th>
+                    <th class="desktop"></th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @foreach(var employee in Model)
+                {
+                    <tr>
+                        <td>
+                            <a class="edit-link" href="/Client/EditAdminClient?clientId=@employee.Id">@employee.Name</a>
+                        </td>
+                        
+                        <td>
+                            @employee.Email
+                        </td>
+                        <td>
+                            @if (employee.IsDeleted)
+                            {
+                                <span>1</span>
+                            }
+                            else
+                            {
+                                <span>0</span>
+                            }
+                        </td>
+                        <td>
+                            <a class="btn btn-success btn-sm" role="button" href="/Client/EditAdminClient?clientId=@employee.Id">
+                                <i class="fas fa-solid fa-magnifying-glass"></i>Edytuj
+                            </a>
+
+                            @if (!employee.IsDeleted)
+                            {
+                            <button class="btn btn-danger btn-sm" onclick="deleteClient('@employee.Id', this)">
+                                <i class="fas fa-solid fa-trash-can"></i>Usuń
+                            </button>
+                            }
+
+                           
+
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+
+    </div>
+
+</div>
+
+@section Scripts {
+<partial name="Scripts/_DataTablesScripts" />
+
+    <script>
+
+        var selectedRow;
+        var selectedClientId = 0;
+        var employees;
+
+        $(document).ready(function () {
+
+            $('#isActiveUserCb').prop('checked', $.cookie("isActiveUserCb") === "1")
+
+            $('#isActiveUserCb').change(function(){
+                var cookiesIsActiveUserCbVal = this.checked === true ? "1" : "0";
+                $.cookie("isActiveUserCb", cookiesIsActiveUserCbVal, {path: '/Client', expires: 365});
+            });
+
+            clients = $('#employees').DataTable({
+                paging: true,
+                ordering: true,
+                info: true,
+                responsive: true,
+                autoWidth: false,
+                lengthChange: true,
+                language: {
+                    url: `/lib/datatables/lang/${'@locale'}.json`
+                },
+                order: [[0, "asc"]],
+                columnDefs: [
+                    {
+                        targets: [2],
+                        visible: false,
+                        searchable: true
+                    }]
+            });
+
+        });
+
+   $.fn.dataTable.ext.search.push(
+        function(settings, data, dataIndex, rowData, counter) {
+
+            var isActiveUserCb = $('#isActiveUserCb').is(":checked");
+
+            var activeUserCol = parseInt(data[2]);
+
+            if (isActiveUserCb && activeUserCol == 1)
+                return false;
+
+            return true;
+        }
+    );
+
+        function refreshTable() {
+            employees.draw();
+    }
+
+        function deleteClient(id, btn){
+            selectedRow = btn.parentNode.parentNode;
+            selectedClientId = id;
+
+            $('#modal-confirm-delete').modal('show');
+
+        }
+
+        var errorMessage = 'Błąd. Nie udało się usunąć wybranego klienta. Spróbuj ponownie lub skontaktuj się z administratorem.'
+
+        $('#modal-confirm-delete-btn').on('click', function (e){
+            
+            $('#modal-confirm-delete').modal('hide');
+
+            $.ajax({
+                type: "POST",
+                url: "/User/DeleteUser",
+                data: {
+                    id: selectedClientId
+                },
+                success: function (data) {
+                    if (data.success){
+                        clients.rows(selectedRow).remove().draw();
+                        toastr.success('Dane zostały zaktualizowane.')
+                    } 
+                    else
+                        toastr.error(errorMessage);
+                    
+                },
+                error: function (data) {
+                        toastr.error(errorMessage);
+
+                }, 
+                dataType: "json"
+            });
+        });
+
+
+
+  
+    </script>
+}
