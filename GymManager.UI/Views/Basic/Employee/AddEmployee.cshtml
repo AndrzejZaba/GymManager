@@ -12,6 +12,7 @@
 
 @section Styles{
     <partial name="Styles/_DateTimeStyles" />
+    <partial name="Styles/_EditorStyles" />
     <partial name="Styles/_SelectStyles" />
 }
 
@@ -145,7 +146,7 @@
             
             <div class="form-group">
                 @Html.LabelFor(x => x.WebsiteRaw)
-                @Html.TextBoxFor(x => x.WebsiteRaw, new { @class = "form-control", placeholder="Wprowadź treść strony profilowej " })
+                @Html.TextAreaFor(x => x.WebsiteRaw, new { @class = "form-control summernote", placeholder="Wprowadź treść strony profilowej " })
                 @Html.ValidationMessageFor(x => x.WebsiteRaw)
             </div>
 
@@ -167,6 +168,7 @@
 @section Scripts{
     <partial name="Scripts/_ValidationScriptsPartial" />
     <partial name="Scripts/_DateTimeScripts" />
+    <partial name="Scripts/_EditorScripts" />
     <partial name="Scripts/_SelectScripts" />
 
 
@@ -177,6 +179,9 @@
         var selectedFileBrowseId;
 
         $(document).ready(function() {
+
+            // function init from _EditorScripts
+            init("#WebsiteRaw");
 
             $('#dtpDateOfEmployment').datetimepicker({
                 format: 'L',

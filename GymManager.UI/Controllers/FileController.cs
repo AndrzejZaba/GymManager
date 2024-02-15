@@ -90,4 +90,43 @@ public class FileController : BaseController
 
     }
 
+
+    [HttpPost]
+    public async Task<IActionResult> UploadEditor(IEnumerable<IFormFile> files)
+    {
+        try
+        {
+            await Mediator.Send(
+                new UploadFileCommand
+                {
+                    Files = files
+                });
+
+            return Json(new 
+            { 
+                success = true,
+                fullPath = Path.Combine($"{Request.Scheme}://{Request.Host}{Request.PathBase}", "Content", "Files", files.First().FileName),
+                name = files.First().FileName
+            });
+        }
+        catch (ValidationException exception)
+        {
+            _logger.LogError(exception, null);
+
+            return Json(new
+            {
+                success = false,
+                message = string.Join(". ", exception.Errors.Select
+                (x => string.Join(". ", x.Value.Select(y => y))))
+            });
+        }
+        catch (Exception exception)
+        {
+            _logger.LogError(exception, null);
+
+            return Json(new { success = false });
+        }
+    }
+
+
 }

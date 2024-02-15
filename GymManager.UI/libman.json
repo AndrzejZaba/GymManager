@@ -198,6 +198,17 @@
         "js/select2.full.min.js",
         "css/select2.min.css"
       ]
+    },
+    {
+      "library": "summernote@0.8.20",
+      "destination": "wwwroot/lib/summernote/",
+      "files": [
+        "summernote.min.js",
+        "font/summernote.eot",
+        "font/summernote.ttf",
+        "font/summernote.woff",
+        "font/summernote.woff2"
+      ]
     }
   ]
 }
