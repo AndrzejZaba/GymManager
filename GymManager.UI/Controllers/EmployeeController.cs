@@ -1,6 +1,7 @@
 ﻿using GymManager.Application.Common.Interfaces;
 using GymManager.Application.Dictionaries;
 using GymManager.Application.Employees.Commands.AddEmployee;
+using GymManager.Application.Employees.Queries.GetEditEmployee;
 using GymManager.Application.Employees.Queries.GetEmployeeBasics;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -39,4 +40,25 @@ public class EmployeeController : BaseController
 
         return RedirectToAction("Employees");
     }
+    
+    public async Task<IActionResult> EditEmployee(string employeeId)
+    {
+        return View(await Mediator.Send(new GetEditEmployeeQuery { UserId = employeeId}));
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> EditEmployee(EditEmployeeVm viewModel)
+    {
+        var result = await MediatorSendValidate(viewModel.Employee);
+
+        if (!result.IsValid)
+            return View(viewModel);
+
+        TempData["success"] = "Dane pracownika zostały zaktualizowane.";
+
+        return RedirectToAction("Employees");
+    }
+
+
 }
