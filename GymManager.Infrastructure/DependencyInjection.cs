@@ -58,6 +58,7 @@ public static class DependencyInjection
         services.AddHttpClient<IPrzelewy24, Przelewy24>();
         services.AddScoped<IQrCodeGenerator, QrCodeGenerator>();
         services.AddScoped<IPdfFileGenerator, RotativaPdfGenerator>();
+        services.AddScoped<IRandomService, RandomService>();
 
 
         return services;

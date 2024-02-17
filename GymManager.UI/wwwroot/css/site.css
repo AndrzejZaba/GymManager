@@ -159,3 +159,7 @@ small, .small{
 .fileBrowse:hover{
     cursor:pointer;
 }
+
+#calendar a {
+    color: black;
+}

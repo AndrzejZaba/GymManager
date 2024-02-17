@@ -14,7 +14,8 @@ public class GetEmployeePageQueryHandler : IRequestHandler<GetEmployeePageQuery,
     }
     public async Task<EmployeePageDto> Handle(GetEmployeePageQuery request, CancellationToken cancellationToken)
     {
-        var employee = await _context.Users
+        var employee = await _context
+            .Users
             .AsNoTracking()
             .Include(x => x.Employee)
             .Where(x => x.Employee != null)
