@@ -3,6 +3,7 @@ using GymManager.Application.Dictionaries;
 using GymManager.Application.Employees.Commands.AddEmployee;
 using GymManager.Application.Employees.Queries.GetEditEmployee;
 using GymManager.Application.Employees.Queries.GetEmployeeBasics;
+using GymManager.Application.Employees.Queries.GetEmployeePage;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -60,5 +61,15 @@ public class EmployeeController : BaseController
         return RedirectToAction("Employees");
     }
 
+    [Route("trener/{employeePageUrl}")]
+    public async Task<IActionResult> EmployeePage (string employeePageUrl)
+    {
+        var page = await Mediator.Send(new GetEmployeePageQuery { Url = employeePageUrl });
+
+        if (page == null)
+            return NotFound();
+
+        return View(page);
+    }
 
 }

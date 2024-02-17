@@ -189,6 +189,13 @@
             <a href="/Employee/Employees" class="btn btn-secondary btn-lg" role="button">
             <i class="fas fa-solid fa-cancel"></i>Anuluj
             </a>
+
+            @if (!string.IsNullOrWhiteSpace(Model.Employee.WebsiteUrl))
+            {
+                <a class="btn btn-secondary btn-lg" role="button" href="/trener/@Model.Employee.WebsiteUrl" target="_blank">
+                    <i class="fas fa-solid fa-globe"></i>Strona profilowa
+                </a>
+            }
         </div>
 
     }
