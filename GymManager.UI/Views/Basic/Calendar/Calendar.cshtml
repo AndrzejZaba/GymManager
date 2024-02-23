@@ -10,7 +10,13 @@
 
 @section Styles{
     <link rel="stylesheet" href="~/lib/fullcalendar/main.min.css" />
+   
+    <partial name="Styles/_DateTimeStyles" />
+    <partial name="Styles/_SelectStyles" />
+
 }
+
+<partial name="Modals/_ModalEvent" model="@Model" />
 
 
 <div class="card card-primary card-border-top">
@@ -28,13 +34,33 @@
     <script src="~/lib/fullcalendar/main.min.js"></script>
     <script src="~/lib/fullcalendar/locales/pl.min.js"></script>
 
+    <partial name="Scripts/_DateTimeScripts" />
+    <partial name="Scripts/_SelectScripts" />
+
 <script>
 
     var events = [];
 
     $(document).ready(function() {
 
+        // modal window script
+        $('.select2-UserId').select2({
+            theme: 'bootstrap-5'
+        });
+
+        $('#dtpStart').datetimepicker({
+            format: 'L',
+            locale: '@locale'
+        });
+        
+        $('#dtpEnd').datetimepicker({
+            format: 'L',
+            locale: '@locale'
+        });
+
         createCalendar();
+
+        $('#modal-calendar').modal('show');
 
     });
 
@@ -96,6 +122,12 @@
         calendar.render();
 
     }
+
+
+    function deleteEvent() {
+
+    }
+
 
 </script>
 }
