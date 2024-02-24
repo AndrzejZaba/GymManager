@@ -1,10 +1,5 @@
 ﻿using GymManager.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using File = GymManager.Domain.Entities.File;
 
 namespace GymManager.Application.Common.Interfaces;
@@ -16,7 +11,7 @@ public interface IApplicationDbContext : IDisposable
     DbSet<Employee> Employees { get; set; }
     DbSet<EmployeeEvent> EmployeeEvents { get; set; }
     DbSet<SettingsPosition> SettingsPositions { get; set; }
-    DbSet<Settings> Settings { get; set; }
+    DbSet<Domain.Entities.Settings> Settings { get; set; }
     DbSet<Ticket> Tickets { get; set; }
     DbSet<TicketType> TicketTypes { get; set; }
     DbSet<File> Files { get; set; }
