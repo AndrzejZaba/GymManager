@@ -164,7 +164,7 @@
         $('#modal-calendar').modal('hide');
         var model = $(this).serialize();
 
-        $("#Id").val(0) == 0 ? addEvent(model) : updateEvent(model);
+        $("#Id").val() == 0 ? addEvent(model) : updateEvent(model);
 
         
         return false;
@@ -227,6 +227,34 @@
 
 
     function deleteEvent() {
+
+        $('#modal-calendar').modal('hide');
+
+        var errorMessage = "Błąd. Nie udało się usunąć danych z kalendarza. Spróbuj ponownie lub skontaktuj się z administratorem.";
+
+        $.ajax({
+            type: "POST",
+            url: "/Calendar/DeleteEmployeeEvent",
+            data: {
+                id: $("#Id").val()
+            },
+            success: function (data) {
+                
+               if (data.success){
+                   toastr.success('Dane zostały zaktualizowane.');
+                   createCalendar();
+               } else{
+                   toastr.error(errorMessage);
+               }
+
+
+            },
+            error: function (data) {
+                toastr.error(errorMessage);
+            },
+            dataType: "json"
+        });
+
 
     }
 

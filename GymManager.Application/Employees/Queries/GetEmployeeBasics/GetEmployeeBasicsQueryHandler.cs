@@ -19,7 +19,8 @@ public class GetEmployeeBasicsQueryHandler : IRequestHandler<GetEmployeeBasicsQu
         var employees = (await _userRoleManagerService
             .GetUsersInRoleAsync(RolesDict.Pracownik))
             .Select(x => x.ToEmployeeBasicsDto())
-            .Where(x => x.IsDeleted == false);
+            //.Where(x => x.IsDeleted == false)
+            ;
 
         return employees;
     }
