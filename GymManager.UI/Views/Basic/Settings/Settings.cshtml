@@ -7,6 +7,9 @@
     ViewData["Title"] = "Ustawienia";
 }
 
+@section Styles{
+    <link rel="stylesheet" href="~/lib/bootstrap-colorpicker/css/bootstrap-colorpicker.min.css" />
+}
 
 <div class="card card-primary card-border-top">
 
@@ -65,6 +68,16 @@
                                         @Html.PasswordFor(x => Model[i].Positions[j].Value, new { @class = "form-control", value = Model[i].Positions[j].Value })
                                         break;
 
+                                    case SettingsType.Color:
+                                        @Html.Label(Model[i].Positions[j].Description)
+                                        <div class="input-group input-colorpicker">
+                                            @Html.TextBoxFor(x => Model[i].Positions[j].Value, new { @class = "form-control" })
+                                            <div class="input-group-append">
+                                                <span class="input-group-text input-group-colorpicker"><i class="fas fa-square"></i></span>
+                                            </div>
+                                        </div>
+                                        break;
+
                                     default:
                                         break;
                                 }
@@ -99,6 +112,8 @@
         
 @section Scripts{
 
+    <script src="~/lib/bootstrap-colorpicker/js/bootstrap-colorpicker.min.js"></script>
+
     <script>
 
         $(document).ready(function () {
@@ -108,6 +123,15 @@
             $("#pills-tabContent .tab-pane:first-child").addClass("show");
             $("#pills-tabContent .tab-pane:first-child").addClass("active");
 
+            $('.input-colorpicker').colorpicker();
+            
+            $('.input-colorpicker .form-control').each(function () {
+                $('#' + this.id + ' + div i.fa-square').css('color', $(this).val() ); 
+            });
+
+            $('.input-colorpicker').on('colorpickerChange', function(event) {
+                $('#' + event.currentTarget.firstElementChild.id + ' + div i.fa-square').css('color', event.color.toString());
+            });
         });
 
     </script>
