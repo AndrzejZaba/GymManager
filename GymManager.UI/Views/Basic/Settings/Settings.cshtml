@@ -1,4 +1,5 @@
 ﻿@using GymManager.Application.Settings.Queries.GetSettings;
+@using GymManager.Domain.Enums;
 
 @model IList<SettingsDto>
 
@@ -12,25 +13,85 @@
     <div class="card-header bg-transparent p-2">
         <ul class="nav nav-pills" id="pills-tab" role="tablist">
             
-            <li class="nav-item settings-nav-item" role="presentation">
-                <button class="nav-link" id="pills-1-tab" data-bs-toggle="pill" data-bs-target="#pills-1" type="button" role="tab" aria-controls="pills-1" aria-selected="true">Aaaaa</button>
-            </li>
-
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" id="pills-2-tab" data-bs-toggle="pill" data-bs-target="#pills-2" type="button" role="tab" aria-controls="pills-2" aria-selected="false">Bbbbb</button>
-            </li>
+            @foreach (var settings in Model)
+            {
+                <li class="nav-item settings-nav-item" role="presentation">
+                    <button class="nav-link" id="pills-@settings.Id-tab" data-bs-toggle="pill" data-bs-target="#pills-@settings.Id" type="button" role="tab" aria-controls="pills-@settings.Id" aria-selected="true">@settings.Description</button>
+                </li>
+            }
 
         </ul>
     </div>
-    
-    <div class="card-body">
 
-        <div class="tab-content" id="pills-tabContent">
-            <div class="tab-pane fade" id="pills-1" role="tabpanel" aria-labelledby="pills-1-tab" tabindex="0">Aaaasdasd</div>
-            <div class="tab-pane fade" id="pills-2" role="tabpanel" aria-labelledby="pills-2-tab" tabindex="0">BBBbbbsda</div>
+
+    @using (Html.BeginForm("EditSettings", "Settings"))
+    {
+
+        @Html.AntiForgeryToken()
+
+        <div class="card-body">
+            <div class="tab-content" id="pills-tabContent">
+            
+                @for (var i = 0; i < Model.Count; i++)
+                {
+                    <div class="tab-pane fade" id="pills-@Model[i].Id" role="tabpanel" aria-labelledby="pills-@Model[i].Id-tab">
+
+                        @for ( var j = 0; j < Model[i].Positions.Count; j++)
+                        {
+                            <div class="form-group">
+
+                                @switch (Model[i].Positions[j].Type)
+                                {
+                                    case SettingsType.Text:
+                                        @Html.Label(Model[i].Positions[j].Description)
+                                        @Html.TextBoxFor(x => Model[i].Positions[j].Value, new { @class = "form-control" })
+                                        break;
+                                    
+                                    case SettingsType.Boolean:
+                                        <div class="form-ckeck">
+                                            @Html.CheckBox("["+@i+"].Positions["+@j+"].Value", Model[i].Positions[j].Value.ToUpper() == "TRUE"
+                                            , new { @class = "form-check-input" })
+                                            @Html.Label(Model[i].Positions[j].Description, null, new { @class = "form-check-label font-weight-bold" })
+                                        </div>                                        
+                                        break;
+
+                                    case SettingsType.Integer:
+                                        @Html.Label(Model[i].Positions[j].Description)
+                                        @Html.TextBoxFor(x => Model[i].Positions[j].Value, new { @class = "form-control", @type="number" })
+                                        break;
+
+                                    case SettingsType.Password:
+                                        @Html.Label(Model[i].Positions[j].Description)
+                                        @Html.PasswordFor(x => Model[i].Positions[j].Value, new { @class = "form-control", value = Model[i].Positions[j].Value })
+                                        break;
+
+                                    default:
+                                        break;
+                                }
+
+                                @Html.HiddenFor(x => Model[i].Positions[j].Id)
+
+                            </div>
+
+                        }
+                    </div>
+
+                }
+            
+            </div>
+        </div>  
+
+        <div class="card-footer">
+            <button type="submit" class="btn btn-primary btn-lg mr-3">
+            <i class="fas fa-solid fa-circle-check"></i>Zapisz
+            </button>
+            <a href="/Settings/Settings" class="btn btn-secondary btn-lg" role="button">
+            <i class="fas fa-solid fa-cancel"></i>Anuluj
+            </a>
         </div>
 
-    </div>
+    }
+    
 
 </div>
 
