@@ -140,7 +140,7 @@
 
             var isActiveUserCb = $('#isActiveUserCb').is(":checked");
 
-            var activeUserCol = parseInt(data[2]);
+            var activeUserCol = parseInt(data[2].slice(6, 7));
 
             if (isActiveUserCb && activeUserCol == 1)
                 return false;
