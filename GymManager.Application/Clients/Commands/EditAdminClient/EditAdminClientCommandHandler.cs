@@ -50,9 +50,9 @@ public class EditAdminClientCommandHandler : IRequestHandler<EditAdminClientComm
         user.Address.Street = request.Street;
         user.Address.StreetNumber = request.StreetNumber;
         user.Address.ZipCode = request.ZipCode;
-        user.Address.UserId = request.Id;
+        user.Address.UserId = request.Id; 
 
-        await _context.SaveChangesAsync(cancellationToken);
+        await _context.SaveChangesAsync(cancellationToken); 
 
         if (request.RoleIds != null && request.RoleIds.Any())
         {
