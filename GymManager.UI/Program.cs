@@ -11,6 +11,7 @@ using System.Globalization;
 using Microsoft.EntityFrameworkCore;
 using GymManager.Infrastructure.Persistence;
 using DataTables.AspNet.AspNetCore;
+using Microsoft.Extensions.Options;
 
 namespace GymManager.UI
 {
@@ -54,6 +55,9 @@ namespace GymManager.UI
 
             using (var scope = app.Services.CreateScope())
             {
+                app.UseRequestLocalization(
+                    app.Services.GetRequiredService<IOptions<RequestLocalizationOptions>>().Value);
+
                 app.UseInfrastructure(
                     scope.ServiceProvider.GetRequiredService<IApplicationDbContext>(),
                     app.Services.GetService<IAppSettingsService>(),

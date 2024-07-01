@@ -16,6 +16,7 @@ namespace GymManager.WebApi.Controllers
         public WeatherForecastController(ILogger<WeatherForecastController> logger)
         {
             _logger = logger;
+            throw new NotImplementedException();
         }
 
         [HttpGet(Name = "GetWeatherForecast")]

@@ -1,6 +1,10 @@
 using GymManager.Application;
 using GymManager.Application.Common.Interfaces;
 using GymManager.Infrastructure;
+using GymManager.WebApi.Extensions;
+using GymManager.WebApi.Middlewares;
+using Microsoft.Extensions.Options;
+using NLog.Web;
 
 namespace GymManager.WebApi
 {
@@ -9,6 +13,13 @@ namespace GymManager.WebApi
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            builder.Logging.ClearProviders();
+            builder.Logging.SetMinimumLevel(LogLevel.Information);
+            builder.Logging.AddNLogWeb();
+
+            builder.Services.AddCors();
+            builder.Services.AddCulture();
 
             builder.Services.AddApplication();
             builder.Services.AddInfrastructure(builder.Configuration);
@@ -19,8 +30,13 @@ namespace GymManager.WebApi
 
             var app = builder.Build();
 
+            app.UseMiddleware<ExceptionHandlerMiddleware>();
+
             using (var scope = app.Services.CreateScope())
             {
+                app.UseRequestLocalization(
+                    app.Services.GetRequiredService<IOptions<RequestLocalizationOptions>>().Value);
+
                 app.UseInfrastructure(
                     scope.ServiceProvider.GetRequiredService<IApplicationDbContext>(),
                     app.Services.GetService<IAppSettingsService>(),
@@ -33,6 +49,11 @@ namespace GymManager.WebApi
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+
+            app.UseCors(x => x
+                .AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader());
 
             app.UseHttpsRedirection();
 
