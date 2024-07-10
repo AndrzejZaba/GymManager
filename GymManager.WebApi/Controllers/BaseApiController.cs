@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace GymManager.WebApi.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
     public abstract class BaseApiController : ControllerBase
     {

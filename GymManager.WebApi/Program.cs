@@ -25,8 +25,15 @@ namespace GymManager.WebApi
             builder.Services.AddInfrastructure(builder.Configuration);
 
             builder.Services.AddControllers();
+
+            builder.Services.AddApiVersioning(options =>
+            {
+                options.AssumeDefaultVersionWhenUnspecified = true;
+                options.DefaultApiVersion = new Microsoft.AspNetCore.Mvc.ApiVersion(1, 0);
+            });
+
             builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
+            builder.Services.AddSwaggerBearerAuthorization();
 
             var app = builder.Build();
 
@@ -47,7 +54,11 @@ namespace GymManager.WebApi
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
-                app.UseSwaggerUI();
+                app.UseSwaggerUI(options =>
+                {
+                    options.SwaggerEndpoint($"/swagger/v1/swagger.json", "v1");
+                    options.SwaggerEndpoint($"/swagger/v2/swagger.json", "v2");
+                });
             }
 
             app.UseCors(x => x
