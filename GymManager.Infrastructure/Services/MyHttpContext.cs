@@ -17,4 +17,6 @@ public class MyHttpContext : IHttpContext
     public string AppBaseUrl => $"{Current.Request.Scheme}://{Current.Request.Host}{Current.Request.PathBase}";
 
     public string IpAddress => Current.Connection.RemoteIpAddress.ToString();   
+
+    public ISession Session => Current.Session;
 }

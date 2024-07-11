@@ -1,6 +1,7 @@
 ﻿using GymManager.Application.Common.Interfaces;
 using GymManager.Domain.Entities;
 using GymManager.Infrastructure.Identity;
+using GymManager.Infrastructure.Invoices;
 using GymManager.Infrastructure.Payments;
 using GymManager.Infrastructure.Pdf;
 using GymManager.Infrastructure.Persistence;
@@ -56,6 +57,7 @@ public static class DependencyInjection
         services.AddSingleton<IHttpContext, MyHttpContext>();
         services.AddSingleton<IFileManagerService, FileManagerService>();
         services.AddHttpClient<IPrzelewy24, Przelewy24>();
+        services.AddHttpClient<IGymInvoices, GymInvoices>();
         services.AddScoped<IQrCodeGenerator, QrCodeGenerator>();
         services.AddScoped<IPdfFileGenerator, RotativaPdfGenerator>();
         services.AddScoped<IRandomService, RandomService>();

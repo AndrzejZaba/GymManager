@@ -12,17 +12,20 @@ public class AddTicketCommandHandler : IRequestHandler<AddTicketCommand, string>
     private readonly IDateTimeService _dateTimeService;
     private readonly IPrzelewy24 _przelewy24;
     private readonly IHttpContext _httpContext;
+    private readonly IGymInvoices _gymInvoices;
 
     public AddTicketCommandHandler(
         IApplicationDbContext context, 
         IDateTimeService dateTimeService, 
         IPrzelewy24 przelewy24,
-        IHttpContext httpContext)
+        IHttpContext httpContext,
+        IGymInvoices gymInvoices)
     {
         _context = context;
         _dateTimeService = dateTimeService;
         _przelewy24 = przelewy24;
         _httpContext = httpContext;
+        _gymInvoices = gymInvoices;
     }
     public async Task<string> Handle(AddTicketCommand request, CancellationToken cancellationToken)
     {

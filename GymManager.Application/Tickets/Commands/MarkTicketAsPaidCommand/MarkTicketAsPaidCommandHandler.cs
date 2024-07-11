@@ -1,6 +1,4 @@
-﻿
-
-using GymManager.Application.Common.Interfaces;
+﻿using GymManager.Application.Common.Interfaces;
 using GymManager.Application.Common.Models.Payments;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -13,15 +11,18 @@ public class MarkTicketAsPaidCommandHandler : IRequestHandler<MarkTicketAsPaidCo
     private readonly IApplicationDbContext _context;
     private readonly IPrzelewy24 _przelewy24;
     private readonly ILogger _logger;
+    private readonly IGymInvoices _gymInvoices;
 
     public MarkTicketAsPaidCommandHandler(
         IApplicationDbContext context,
         IPrzelewy24 przelewy24,
-        ILogger<MarkTicketAsPaidCommandHandler> logger)
+        ILogger<MarkTicketAsPaidCommandHandler> logger,
+        IGymInvoices gymInvoices)
     {
         _context = context;
         _przelewy24 = przelewy24;
         _logger = logger;
+        _gymInvoices = gymInvoices;
     }
     public async Task<Unit> Handle(MarkTicketAsPaidCommand request, CancellationToken cancellationToken)
     {
@@ -32,7 +33,9 @@ public class MarkTicketAsPaidCommandHandler : IRequestHandler<MarkTicketAsPaidCo
         await UpdatePaymentInDb(request.SessionId, cancellationToken);
 
         _logger.LogInformation($"Przelewy24 - payment verification finished - {request.SessionId}");
-    
+
+        await _gymInvoices.AddInvoice(request.SessionId);
+
         return Unit.Value;
     
     }
