@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace GymManager.WebApi.Controllers
 {
@@ -10,7 +11,6 @@ namespace GymManager.WebApi.Controllers
         private ISender _mediator;
         protected ISender Mediator => _mediator ??= HttpContext.RequestServices.GetService<ISender>();
 
-        //TODO: uzupełnić
-        protected string UserId => "286e6d55-3e1f-43e7-b6a5-89735a52138d";
+        protected string UserId => User.FindFirstValue(ClaimTypes.NameIdentifier);
     }
 }

@@ -59,7 +59,7 @@ public static class DependencyInjection
         services.AddScoped<IQrCodeGenerator, QrCodeGenerator>();
         services.AddScoped<IPdfFileGenerator, RotativaPdfGenerator>();
         services.AddScoped<IRandomService, RandomService>();
-
+        services.AddScoped<IJwtService, JwtService>();
 
         return services;
     }
