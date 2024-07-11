@@ -3,6 +3,7 @@ using GymManager.Application.Common.Interfaces;
 using GymManager.Infrastructure;
 using GymManager.WebApi.Extensions;
 using GymManager.WebApi.Middlewares;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Options;
 using NLog.Web;
 
@@ -67,6 +68,14 @@ namespace GymManager.WebApi
                 .AllowAnyOrigin()
                 .AllowAnyMethod()
                 .AllowAnyHeader());
+
+            app.UseFileServer(new FileServerOptions 
+            {
+                FileProvider = new PhysicalFileProvider(
+                    Path.Combine(Directory.GetCurrentDirectory(), "wwwroot")),
+                RequestPath = "/wwwroot",
+                EnableDefaultFiles = true
+            });
 
             app.UseHttpsRedirection();
 
