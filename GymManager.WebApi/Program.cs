@@ -24,6 +24,8 @@ namespace GymManager.WebApi
             builder.Services.AddApplication();
             builder.Services.AddInfrastructure(builder.Configuration);
 
+            builder.Services.AddBearerAuthentication(builder.Configuration);
+
             builder.Services.AddControllers();
 
             builder.Services.AddApiVersioning(options =>
@@ -68,6 +70,7 @@ namespace GymManager.WebApi
 
             app.UseHttpsRedirection();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
 

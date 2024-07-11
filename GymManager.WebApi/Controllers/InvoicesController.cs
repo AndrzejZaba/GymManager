@@ -3,12 +3,14 @@ using GymManager.Application.Invoices.Commands.DeleteInvoice;
 using GymManager.Application.Invoices.Commands.EditInvoice;
 using GymManager.Application.Invoices.Queries.GetInvoice;
 using GymManager.Application.Invoices.Queries.GetInvoices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GymManager.WebApi.Controllers;
 
 [ApiVersion("1")]
 [ApiExplorerSettings(GroupName = "v1")]
+[Authorize]
 public class InvoicesController : BaseApiController
 {
     [HttpGet]
