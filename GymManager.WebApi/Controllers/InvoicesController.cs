@@ -3,6 +3,7 @@ using GymManager.Application.Invoices.Commands.DeleteInvoice;
 using GymManager.Application.Invoices.Commands.EditInvoice;
 using GymManager.Application.Invoices.Queries.GetInvoice;
 using GymManager.Application.Invoices.Queries.GetInvoices;
+using GymManager.Application.Invoices.Queries.GetPdfInvoice;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -88,5 +89,22 @@ public class InvoicesController : BaseApiController
         await Mediator.Send(command);
 
         return NoContent();
+    }
+
+    [HttpGet("pdf/{id}")]
+    public async Task<IActionResult> GetPdf(int id)
+    {
+        var vm = await Mediator.Send(new GetPdfInvoiceQuery
+        {
+            UserId = UserId,
+            InvoiceId = id,
+            Context = ControllerContext
+        });
+
+        if (vm == null)
+            return NotFound();
+
+        return Ok(vm);
+
     }
 }
