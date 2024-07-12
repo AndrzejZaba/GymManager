@@ -38,6 +38,9 @@ public class AddTicketCommandHandler : IRequestHandler<AddTicketCommand, string>
 
         await AddToDatabase(request, sessionId, token, cancellationToken);
 
+        // Dodanie faktury przy dodawaniu nowego karnetu. 
+        await _gymInvoices.AddInvoice(sessionId);
+
         return token;
     }
 
