@@ -1,6 +1,7 @@
 ﻿using GymManager.Application.Common.Interfaces;
 using GymManager.Application.Common.Models.Invoices;
 using GymManager.Application.Invoices.Commands.AddInvoice;
+using GymManager.Application.GymInvoices.Queries.GetPdfGymInvoice;
 using GymManager.Domain.Entities;
 using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.AspNetCore.Http;
@@ -143,4 +144,19 @@ public class GymInvoices : IGymInvoices
 
     }
 
+    public async Task<InvoicePdfVm> GetPdfInvoice(int id)
+    {
+
+        await SetHeader();
+
+        var response = await _httpClient.GetAsync($"/api/v1/invoices/pdf/{id}");
+
+        if (!response.IsSuccessStatusCode)
+        {
+            _logger.LogError(response.RequestMessage.ToString(), null);
+            throw new Exception(response.RequestMessage.ToString());
+        }
+
+        return JsonConvert.DeserializeObject<InvoicePdfVm>(await response.Content.ReadAsStringAsync());
+    }
 }
