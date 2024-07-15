@@ -8,6 +8,7 @@ using GymManager.Application.Tickets.Queries.GetPrintTicket;
 using GymManager.UI.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
 
 namespace GymManager.UI.Controllers
 {
@@ -16,13 +17,17 @@ namespace GymManager.UI.Controllers
     {
         private readonly IConfiguration _configuration;
         private readonly ILogger _logger;
+        //private readonly IStringLocalizer<CommonResources> _localizer;
+        private readonly IStringLocalizer<TicketController> _localizer;
 
         public TicketController(
             IConfiguration configuration,
-            ILogger<TicketController> logger)
+            ILogger<TicketController> logger,
+            IStringLocalizer<TicketController> localizer)
         {
             _configuration = configuration;
             _logger = logger;
+            _localizer = localizer;
         }
 
         public async Task<IActionResult> Tickets()
@@ -66,7 +71,7 @@ namespace GymManager.UI.Controllers
             if (!result.IsValid)
                 return View(vm);
 
-            TempData["Success"] = "Nowy karnet został utworzony. Oczekiwanie na zweryfikowanie płatności.";
+            TempData["Success"] = _localizer["TicketCreated"].Value;
 
             // Dodanie karnetu z płatnością
             //return Redirect($"{_configuration.GetValue<string>("Przelewy24:BaseUrl")}/trnRequest/{result.Model}");

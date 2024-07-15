@@ -25,6 +25,8 @@ namespace GymManager.UI
             builder.Logging.SetMinimumLevel(LogLevel.Information);
             builder.Logging.AddNLogWeb();
 
+            builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
+
             builder.Services.AddCulture();
 
             builder.Services.AddSession();
@@ -41,7 +43,8 @@ namespace GymManager.UI
             // Add services to the container.
             builder.Services
                 .AddControllersWithViews()
-                .AddSessionStateTempDataProvider();
+                .AddSessionStateTempDataProvider()
+                .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix);
             //Dodane Razor Pages
             builder.Services.AddRazorPages();
 
