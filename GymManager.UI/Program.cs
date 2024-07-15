@@ -44,7 +44,14 @@ namespace GymManager.UI
             builder.Services
                 .AddControllersWithViews()
                 .AddSessionStateTempDataProvider()
-                .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix);
+                .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix)
+                .AddDataAnnotationsLocalization(x =>
+                {
+                    x.DataAnnotationLocalizerProvider = (type, factory) =>
+                    {
+                        return factory.Create(typeof(Application.CommonResources));
+                    };
+                });
             //Dodane Razor Pages
             builder.Services.AddRazorPages();
 
