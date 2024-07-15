@@ -1,6 +1,4 @@
-﻿
-
-using GymManager.Application.Common.Interfaces;
+﻿using GymManager.Application.Common.Interfaces;
 using GymManager.Application.Tickets.Commands.AddTicket;
 using GymManager.Application.Tickets.Extensions;
 using MediatR;
@@ -29,7 +27,7 @@ public class GetAddTicketQueryHandler : IRequestHandler<GetAddTicketQuery, AddTi
         };
 
         vm.AvailableTicketTypes = await _context.TicketTypes
-            .Include(x => x.Translations.Where(y => y.Language.Key == "pl"))
+            .Include(x => x.Translations.Where(y => y.Language.Key == request.Language))
             .ThenInclude(x => x.Language)
             .AsNoTracking()
             .Select(x => x.ToDto())

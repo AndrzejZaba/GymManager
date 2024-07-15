@@ -53,7 +53,10 @@ namespace GymManager.UI.Controllers
 
         public async Task<IActionResult> AddTicket()
         {
-            return View(await Mediator.Send(new GetAddTicketQuery())); 
+            return View(await Mediator.Send(new GetAddTicketQuery
+            {
+                Language = CurrentLanguage
+            })); 
         }
 
         [HttpPost]
