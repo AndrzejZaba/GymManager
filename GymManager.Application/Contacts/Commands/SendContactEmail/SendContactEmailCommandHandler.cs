@@ -9,12 +9,16 @@ public class SendContactEmailCommandHandler :
 {
     private readonly IEmail _email;
     private readonly IAppSettingsService _appSettingsService;
+    private readonly IBackgroundWorkerQueue _backgroundWorkerQueue;
 
-    public SendContactEmailCommandHandler(IEmail email,
-        IAppSettingsService appSettingsService)
+    public SendContactEmailCommandHandler(
+        IEmail email,
+        IAppSettingsService appSettingsService,
+        IBackgroundWorkerQueue backgroundWorkerQueue)
     {
         _email = email;
         _appSettingsService = appSettingsService;
+        _backgroundWorkerQueue = backgroundWorkerQueue;
     }
     public async Task<Unit> Handle(SendContactEmailCommand request, 
         CancellationToken cancellationToken)
@@ -23,9 +27,15 @@ public class SendContactEmailCommandHandler :
             {request.Email}.<br /><br />Tytuł wiadomości: {request.Title}.<br /><br />
             Wiadomość: {request.Message}<br /><br />Wysłano z: GymManager.";
 
-        await _email.SendAsync($@"Wiadomość z GymManager: {request.Title}",
+
+        _backgroundWorkerQueue.QueueBackgroundWorkItem(async x =>
+        {
+            await _email.SendAsync(
+            $@"Wiadomość z GymManager: {request.Title}",
             body,
             await _appSettingsService.Get(SettingsDict.AdminEmail));
+            await Task.Delay(5000);
+        }, $"Kontakt. E-mail: {request.Email}");
 
         return Unit.Value;
     }

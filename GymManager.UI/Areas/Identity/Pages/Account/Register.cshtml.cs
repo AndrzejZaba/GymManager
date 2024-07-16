@@ -33,6 +33,7 @@ namespace GymManager.UI.Areas.Identity.Pages.Account
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmail _email;
         private readonly IDateTimeService _dateTimeService;
+        private readonly IBackgroundWorkerQueue _backgroundWorkerQueue;
 
         public RegisterModel(
             UserManager<ApplicationUser> userManager,
@@ -40,7 +41,8 @@ namespace GymManager.UI.Areas.Identity.Pages.Account
             SignInManager<ApplicationUser> signInManager,
             ILogger<RegisterModel> logger,
             IEmail email,
-            IDateTimeService dateTimeService)
+            IDateTimeService dateTimeService,
+            IBackgroundWorkerQueue backgroundWorkerQueue)
         {
             _userManager = userManager;
             _userStore = userStore;
@@ -49,6 +51,7 @@ namespace GymManager.UI.Areas.Identity.Pages.Account
             _logger = logger;
             _email = email;
             _dateTimeService = dateTimeService;
+            _backgroundWorkerQueue = backgroundWorkerQueue;
         }
 
         /// <summary>
@@ -142,12 +145,14 @@ namespace GymManager.UI.Areas.Identity.Pages.Account
                         values: new { area = "Identity", userId = userId, code = code, returnUrl = returnUrl },
                         protocol: Request.Scheme);
 
-                    await _email.SendAsync(
+                    _backgroundWorkerQueue.QueueBackgroundWorkItem(async x =>
+                    {
+                        await _email.SendAsync(
                         "Potwierdź e-mail",
                         $@"Aby powteirdzić utworzone konto kliknij w link: <a 
                         href='{HtmlEncoder.Default.Encode(callbackUrl)}'>Kliknij tutaj</a>",
                         Input.Email);
-
+                    }, $"Aktywacja konta. E-mail: {Input.Email}");
 
                     return RedirectToPage("RegisterConfirmation", new { email = Input.Email, returnUrl = returnUrl });
 

@@ -28,6 +28,9 @@ public static class DependencyInjection
         options.UseSqlServer(connectionString)
         .EnableSensitiveDataLogging());
 
+        services.AddHostedService<LongRunningService>();
+        services.AddSingleton<IBackgroundWorkerQueue, BackgroundWorkerQueue>();
+
         services.AddIdentity<ApplicationUser, IdentityRole>(options =>
         {
             options.SignIn.RequireConfirmedAccount = true;
