@@ -12,17 +12,20 @@ public class MarkTicketAsPaidCommandHandler : IRequestHandler<MarkTicketAsPaidCo
     private readonly IPrzelewy24 _przelewy24;
     private readonly ILogger _logger;
     private readonly IGymInvoices _gymInvoices;
+    private readonly IUserNotificationService _userNotificationService;
 
     public MarkTicketAsPaidCommandHandler(
         IApplicationDbContext context,
         IPrzelewy24 przelewy24,
         ILogger<MarkTicketAsPaidCommandHandler> logger,
-        IGymInvoices gymInvoices)
+        IGymInvoices gymInvoices,
+        IUserNotificationService userNotificationService)
     {
         _context = context;
         _przelewy24 = przelewy24;
         _logger = logger;
         _gymInvoices = gymInvoices;
+        _userNotificationService = userNotificationService;
     }
     public async Task<Unit> Handle(MarkTicketAsPaidCommand request, CancellationToken cancellationToken)
     {
@@ -30,11 +33,15 @@ public class MarkTicketAsPaidCommandHandler : IRequestHandler<MarkTicketAsPaidCo
 
         await VerifyTransactionPrzelewy24(request);
 
-        await UpdatePaymentInDb(request.SessionId, cancellationToken);
+        var ticket = await _context.Tickets.FirstOrDefaultAsync(x => x.Id == request.SessionId);
+
+        await UpdatePaymentInDb(ticket.Id, cancellationToken);
 
         _logger.LogInformation($"Przelewy24 - payment verification finished - {request.SessionId}");
 
-        await _gymInvoices.AddInvoice(request.SessionId);
+        await _gymInvoices.AddInvoice(ticket.Id);
+
+        await _userNotificationService.SendNotification(ticket.UserId, "Płatność została potwierdzona. Dziękujemy za zakup karnetu");
 
         return Unit.Value;
     

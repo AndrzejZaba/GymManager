@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using GymManager.Infrastructure.Persistence;
 using DataTables.AspNet.AspNetCore;
 using Microsoft.Extensions.Options;
+using GymManager.Infrastructure.SignalR.UserNotification;
 
 namespace GymManager.UI
 {
@@ -108,6 +109,8 @@ namespace GymManager.UI
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
+
+            app.MapHub<NotificationUserHub>("/NotificationUserHub");
 
             app.MapRazorPages();
 

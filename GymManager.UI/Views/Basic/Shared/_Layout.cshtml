@@ -1,8 +1,7 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+﻿@using GymManager.Application.Common.Interfaces;
+
+@inject ICurrentUserService currentUserService
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -63,6 +62,7 @@
                 <div class="pb-1">
                     <div class="container-fluid">
                         <div class="row" id="main-body">
+                            <input type="hidden" id="signalRConnectionId" />
                             @*Widok*@
                             @RenderBody()
                         </div>
@@ -83,6 +83,11 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/jquery.cookie/jquery.cookie.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        var userId = '@currentUserService.UserId';
+    </script>
+    <script src="~/lib/microsoft-signalr/signalr.min.js"></script>
+    <script src="~/js/usernotification.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="~/lib/toastr.js/toastr.min.js"></script>
 

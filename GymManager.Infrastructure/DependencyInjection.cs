@@ -6,6 +6,7 @@ using GymManager.Infrastructure.Payments;
 using GymManager.Infrastructure.Pdf;
 using GymManager.Infrastructure.Persistence;
 using GymManager.Infrastructure.Services;
+using GymManager.Infrastructure.SignalR.UserNotification;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -65,6 +66,9 @@ public static class DependencyInjection
         services.AddScoped<IPdfFileGenerator, RotativaPdfGenerator>();
         services.AddScoped<IRandomService, RandomService>();
         services.AddScoped<IJwtService, JwtService>();
+        services.AddSignalR();
+        services.AddSingleton<IUserNotificationService, UserNotificationService>();
+        services.AddSingleton<IUserConnectionManager, UserConnectionManager>();
 
         return services;
     }
