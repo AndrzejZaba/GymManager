@@ -18,20 +18,8 @@ namespace GymManager.UI.Controllers;
 [Authorize]
 public class ClientController : BaseController
 {
-    private readonly IEventDispatcher _eventDispatcher;
-
-    public ClientController(IEventDispatcher eventDispatcher)
+        public async Task<IActionResult> Dashboard()
     {
-        _eventDispatcher = eventDispatcher;
-    }
-    public async Task<IActionResult> Dashboard()
-    {
-        await _eventDispatcher.PublishAsync(new TicketPaidEvent
-        {
-            TicketId = "03f76167-0fa9-4609-b3aa-609ddf453bcd",
-            UserId = UserId
-        });
-
         return View(await Mediator.Send(new GetClientDashboardQuery
         {
             UserId = UserId
