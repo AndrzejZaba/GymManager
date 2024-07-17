@@ -16,6 +16,7 @@ public class Przelewy24 : IPrzelewy24
     private readonly HttpClient _httpClient;
     private readonly IConfiguration _configuration;
     private readonly ILogger<Przelewy24> _logger;
+    private readonly IEncryptionService _encryptionService;
     private string _crc;
     private string _userName;
     private string _userSecret;
@@ -25,12 +26,13 @@ public class Przelewy24 : IPrzelewy24
     public Przelewy24(
         HttpClient httpClient,
         IConfiguration configuration,
-        ILogger<Przelewy24> logger)
+        ILogger<Przelewy24> logger,
+        IEncryptionService encryptionService)
     {
         _httpClient = httpClient;
         _configuration = configuration;
         _logger = logger;
-
+        _encryptionService = encryptionService;
         GetConfiguration();
         InitHttpClient();
         InitJsonSettings();
@@ -65,7 +67,8 @@ public class Przelewy24 : IPrzelewy24
     {
         _crc = _configuration.GetValue<string>("Przelewy24:Crc");
         _userName = _configuration.GetValue<string>("Przelewy24:UserName");
-        _userSecret = _configuration.GetValue<string>("Przelewy24:UserSecret");
+        _userSecret = _encryptionService.Decrypt(_configuration.GetValue<string>("Przelewy24:UserSecret")); // if user secret is encrypted
+        //_userSecret = _configuration.GetValue<string>("Przelewy24:UserSecret");
         _baseUrl = _configuration.GetValue<string>("Przelewy24:BaseUrl");
 }
 

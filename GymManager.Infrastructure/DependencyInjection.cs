@@ -1,5 +1,6 @@
 ﻿using GymManager.Application.Common.Interfaces;
 using GymManager.Domain.Entities;
+using GymManager.Infrastructure.Encryption;
 using GymManager.Infrastructure.Identity;
 using GymManager.Infrastructure.Invoices;
 using GymManager.Infrastructure.Payments;
@@ -21,9 +22,18 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
+        // rxgCe0XpNRpqI6UNFsL0XxX8AvDQPvWFEnom4WlTeZE=
+        // MageyledYuyMD0RV8QEV6A==
+
+        var encryptionService = new EncryptionService(new KeyInfo
+            ("rxgCe0XpNRpqI6UNFsL0XxX8AvDQPvWFEnom4WlTeZE=", 
+            "MageyledYuyMD0RV8QEV6A=="));
+
+        services.AddSingleton<IEncryptionService>(encryptionService);
+
         services.AddScoped<IApplicationDbContext, ApplicationDbContext>();
 
-        var connectionString = configuration.GetConnectionString("DefaultConnection");
+        var connectionString = encryptionService.Decrypt(configuration.GetConnectionString("DefaultConnection"));
 
         services.AddDbContext<ApplicationDbContext>(options => 
         options.UseSqlServer(connectionString)
