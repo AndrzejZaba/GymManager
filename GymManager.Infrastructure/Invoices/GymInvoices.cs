@@ -26,6 +26,7 @@ public class GymInvoices : IGymInvoices
     private readonly ICurrentUserService _currentUserService;
     private readonly IApplicationDbContext _context;
     private string _baseUrl;
+    private string _explicitUserId;
 
     public GymInvoices(
         HttpClient httpClient,
@@ -60,7 +61,7 @@ public class GymInvoices : IGymInvoices
 
         if(string.IsNullOrWhiteSpace(token) || TokenHasExpired(token) ) 
         {
-            var userId = _currentUserService.UserId;
+            var userId = _currentUserService.UserId ?? _explicitUserId ?? null;
 
             if (string.IsNullOrWhiteSpace(userId))
                 throw new Exception("unauthorized");
@@ -123,8 +124,10 @@ public class GymInvoices : IGymInvoices
 
     }
 
-    public async Task AddInvoice(string ticketId)
+    public async Task AddInvoice(string ticketId, string userId = null)
     {
+        _explicitUserId = userId;
+
         await SetHeader();
 
         var jsonContent = JsonConvert.SerializeObject(new AddInvoiceCommand

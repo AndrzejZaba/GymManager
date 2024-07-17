@@ -1,6 +1,8 @@
-﻿using GymManager.Application.Common.Interfaces;
+﻿using GymManager.Application.Common.Events;
+using GymManager.Application.Common.Interfaces;
 using GymManager.Domain.Entities;
 using GymManager.Infrastructure.Encryption;
+using GymManager.Infrastructure.Events;
 using GymManager.Infrastructure.Identity;
 using GymManager.Infrastructure.Invoices;
 using GymManager.Infrastructure.Payments;
@@ -15,6 +17,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Rotativa.AspNetCore;
+using System.Reflection;
 
 namespace GymManager.Infrastructure;
 
@@ -80,9 +83,28 @@ public static class DependencyInjection
         services.AddSingleton<IUserNotificationService, UserNotificationService>();
         services.AddSingleton<IUserConnectionManager, UserConnectionManager>();
 
+        RegisterEvents(services);
+
         return services;
     }
-     
+
+    private static void RegisterEvents(IServiceCollection services)
+    {
+        services.AddSingleton<IEventDispatcher, EventDispatcher>();
+
+        var assemblies = Assembly
+            .GetExecutingAssembly()
+            .GetReferencedAssemblies()
+            .Select(Assembly.Load)
+            .ToList();
+
+        services
+            .Scan(x => x.FromAssemblies(assemblies)
+            .AddClasses(x => x.AssignableTo(typeof(IEventHandler<>)))
+            .AsImplementedInterfaces()
+            .WithScopedLifetime());
+    }
+
     public static IApplicationBuilder UseInfrastructure(
         this IApplicationBuilder app,
         IApplicationDbContext context,

@@ -5,9 +5,11 @@ using GymManager.Application.Clients.Queries.GetClientDashboard;
 using GymManager.Application.Clients.Queries.GetClientsBasics;
 using GymManager.Application.Clients.Queries.GetEditAdminClient;
 using GymManager.Application.Clients.Queries.GetEditClient;
+using GymManager.Application.Common.Events;
 using GymManager.Application.Common.Interfaces;
 using GymManager.Application.Dictionaries;
-using GymManager.Infrastructure.SignalR.UserNotification;
+using GymManager.Application.Tickets.Events;
+using GymManager.Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,15 +18,20 @@ namespace GymManager.UI.Controllers;
 [Authorize]
 public class ClientController : BaseController
 {
-    private readonly IUserNotificationService _userNotificationService;
+    private readonly IEventDispatcher _eventDispatcher;
 
-    public ClientController(IUserNotificationService userNotificationService)
+    public ClientController(IEventDispatcher eventDispatcher)
     {
-        _userNotificationService = userNotificationService;
+        _eventDispatcher = eventDispatcher;
     }
     public async Task<IActionResult> Dashboard()
     {
-        await _userNotificationService.SendNotification(UserId, "Płatność została potwierdzona. Dziękujemy za zakup karnetu");
+        await _eventDispatcher.PublishAsync(new TicketPaidEvent
+        {
+            TicketId = "03f76167-0fa9-4609-b3aa-609ddf453bcd",
+            UserId = UserId
+        });
+
         return View(await Mediator.Send(new GetClientDashboardQuery
         {
             UserId = UserId
